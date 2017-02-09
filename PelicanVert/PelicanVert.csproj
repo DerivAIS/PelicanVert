@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F5C176A6-55A3-4B3A-BE01-425F6D059CCE}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PelicanVert</RootNamespace>
+    <AssemblyName>PelicanVert</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Bloomberglp.Blpapi">
+      <HintPath>F:\MARK-LYX-QMG\DValo\_Documents\Technical Docs\Bloomberglp.Blpapi.dll</HintPath>
+    </Reference>
+    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="QLNet, Version=1.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\QLNet.1.9.1\lib\net45\QLNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataIO\Cache\CacheManager.cs" />
+    <Compile Include="DataIO\Data Reader\DataReader.cs" />
+    <Compile Include="DataIO\Database\Connector\Connector Helper.cs" />
+    <Compile Include="DataIO\Database\Connector\Generic Connector.cs" />
+    <Compile Include="DataIO\Database\Connector\GenericDatabaseConnector.cs" />
+    <Compile Include="DataIO\Database\Connector\myDB Connector.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Base\GenericDatabaseLine.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Base\GenericDatabaseTable.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Base\IGenericDatabaseLine.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Base\IGenericDatabaseTable.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Equity Volatility\Equity Volatility Line.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Equity Volatility\Equity Volatility Table.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Equity\Equity Line.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Equity\Equity Table.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Interest Rate\Interest Rate Line.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Interest Rate\Interest Rate Table.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Reference\Reference Line.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Reference\Reference Table.cs" />
+    <Compile Include="DataIO\Database\Database Management\Database Helper.cs" />
+    <Compile Include="DataIO\Database\Database Management\Reference Manager.cs" />
+    <Compile Include="DataIO\Database\Database Request\FundamentalDataRequest.cs" />
+    <Compile Include="DataIO\Database\Database Request\GenericDataRequest.cs" />
+    <Compile Include="DataIO\Database\Database Request\HistoricalDataRequest.cs" />
+    <Compile Include="DataIO\Environment\DBID.cs" />
+    <Compile Include="DataIO\Environment\Environment Variable.cs" />
+    <Compile Include="DataIO\Environment\IDFactory.cs" />
+    <Compile Include="DataIO\Fetcher\Bloomberg\BloombergFetcher.cs" />
+    <Compile Include="DataIO\Fetcher\Fetcher Helper.cs" />
+    <Compile Include="DataIO\Fetcher\Generic\Generic Fetcher.cs" />
+    <Compile Include="DataIO\Markit\EquityIV\MarkitDiscountFactor.cs" />
+    <Compile Include="DataIO\Markit\EquityIV\MarkitDividend.cs" />
+    <Compile Include="DataIO\Markit\EquityIV\MarkitEquityIV New Template.cs" />
+    <Compile Include="DataIO\Markit\EquityIV\MarkitEquityIV.cs" />
+    <Compile Include="DataIO\Markit\EquityIV\MarkitEquityVolatilityReader.cs" />
+    <Compile Include="DataIO\Markit\EquityIV\MarkitForward.cs" />
+    <Compile Include="DataIO\Markit\EquityIV\MarkitSmile.cs" />
+    <Compile Include="DataIO\Markit\EquityIV\MarkitSurface.cs" />
+    <Compile Include="DataIO\Markit\EquityIV\QLNet_Results.cs" />
+    <Compile Include="DataIO\Markit\Generic\MarkitTermStructure.cs" />
+    <Compile Include="DataIO\Markit\Generic\MarkitUtilities.cs" />
+    <Compile Include="DataIO\Markit\Utilities\CSV File Integration.cs" />
+    <Compile Include="Math\RNG\RandomVariables\BaseRandomVariable.cs" />
+    <Compile Include="Math\RNG\RandomVariables\BetaRandomVariable.cs" />
+    <Compile Include="Math\RNG\RandomVariables\CauchyRandomVariable.cs" />
+    <Compile Include="Math\RNG\RandomVariables\ChiSquareRandomVariable.cs" />
+    <Compile Include="Math\RNG\RandomVariables\ExponentialRandomVariable.cs" />
+    <Compile Include="Math\RNG\RandomVariables\GammaRandomVariable.cs" />
+    <Compile Include="Math\RNG\RandomVariables\GaussianRandomVariable.cs" />
+    <Compile Include="Math\RNG\RandomVariables\InverseGammaRandomVariable.cs" />
+    <Compile Include="Math\RNG\RandomVariables\LaplaceRandomVariable.cs" />
+    <Compile Include="Math\RNG\RandomVariables\LogNormalRandomVariable.cs" />
+    <Compile Include="Math\RNG\RandomVariables\StudentRandomVariable.cs" />
+    <Compile Include="Math\RNG\RandomVariables\UniformRandomVariable.cs" />
+    <Compile Include="Math\RNG\RandomVariables\WeibullRandomVariable.cs" />
+    <Compile Include="Pricing\Instruments\Credit\myCDS.cs" />
+    <Compile Include="Pricing\Instruments\Credit\myCDSCurve.cs" />
+    <Compile Include="Pricing\Instruments\Derivatives\old_Autocall\EngineFactory.cs" />
+    <Compile Include="Pricing\Instruments\Derivatives\old_Autocall\MarkitForwardCurve.cs" />
+    <Compile Include="Pricing\Instruments\Derivatives\old_Autocall\myAutocallEngine.cs" />
+    <Compile Include="Pricing\Instruments\Derivatives\old_Autocall\myExercise.cs" />
+    <Compile Include="Pricing\Instruments\Derivatives\old_Autocall\myInstrument.cs" />
+    <Compile Include="Pricing\Instruments\Derivatives\old_Autocall\myPayoff.cs" />
+    <Compile Include="Pricing\Instruments\Derivatives\VanillaOption\BaseIndexOption.cs" />
+    <Compile Include="Pricing\Instruments\Derivatives\VanillaOption\EquityIndexOption.cs" />
+    <Compile Include="Pricing\Instruments\Equities\Dividend\DividendCurve.cs" />
+    <Compile Include="Pricing\Instruments\Equities\Dividend\GenericEquityAsset.cs" />
+    <Compile Include="Pricing\Instruments\Equities\EquityIndex\EquityIndex.cs" />
+    <Compile Include="Pricing\Instruments\Equities\EquityIndex\EquityIndexForward.cs" />
+    <Compile Include="Pricing\Instruments\Equities\EquityIndex\EquityIndexOption.cs" />
+    <Compile Include="Pricing\Instruments\Equities\EquityIndex\Eurostoxx50.cs" />
+    <Compile Include="Pricing\Instruments\Equities\EquityIndex\ForwardSX5E.cs" />
+    <Compile Include="Pricing\Instruments\Equities\EquityIndex\IEquityIndex.cs" />
+    <Compile Include="Pricing\Instruments\Equities\Equity\Equity.cs" />
+    <Compile Include="Pricing\Instruments\Equities\Equity\IEquity.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\DepositRates\myDepositRate.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\DepositRates\myDepositRateEUR.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\DepositRates\myDepositRateEUROIS.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\DepositRates\myDepositRateUSD.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\GenericRate\myRate.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\RateCurves\myRateCurve.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\RateCurves\myRateCurveEUROIS.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\RateCurves\myRateCurveEURv3m.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\RateCurves\myRateCurveEURv6m.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\RateCurves\myRateCurveUSDv3m.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\SwapRates\mySwapRate.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\SwapRates\mySwapRateEUROIS.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\SwapRates\mySwapRateEURv3m.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\SwapRates\mySwapRateEURv6m.cs" />
+    <Compile Include="Pricing\Instruments\Interest Rates\SwapRates\mySwapRateUSDv3m.cs" />
+    <Compile Include="Pricing\Instruments\Utilities\SimulationInstrument.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Simulation\Cash Manager\CashManager.cs" />
+    <Compile Include="Simulation\Engine\AutocallSimulEngine.cs" />
+    <Compile Include="Simulation\Engine\ISimulationEngine.cs" />
+    <Compile Include="Simulation\Engine\SimulationEngine.cs" />
+    <Compile Include="Simulation\Instrument Helper\AutocallHelper.cs" />
+    <Compile Include="Simulation\Instrument Helper\IInstrumentHelper.cs" />
+    <Compile Include="Simulation\Instrument Helper\InstrumentHelper.cs" />
+    <Compile Include="Simulation\Parameters\ISimulationParameters.cs" />
+    <Compile Include="Simulation\Parameters\SimulationParameters.cs" />
+    <Compile Include="Simulation\Position\AutocallPosition.cs" />
+    <Compile Include="Simulation\Position\Position.cs" />
+    <Compile Include="Simulation\Results\IStimulationResults.cs" />
+    <Compile Include="Simulation\Results\MarkitSimulationResults.cs" />
+    <Compile Include="Simulation\Results\SimulationResults.cs" />
+    <Compile Include="Simulation\Strategy\AutocallStrategy.cs" />
+    <Compile Include="Simulation\Strategy\InvestmentStrategy.cs" />
+    <Compile Include="Simulation\Strategy\IStrategy.cs" />
+    <Compile Include="Simulation\Strategy\MarkitStrategy.cs" />
+    <Compile Include="Simulation\Utilities\Utilities.cs" />
+    <Compile Include="TimeSeries\myElement.cs" />
+    <Compile Include="TimeSeries\myFrame OLD.cs" />
+    <Compile Include="TimeSeries\myFrame.cs" />
+    <Compile Include="TimeSeries\myIndex.cs" />
+    <Compile Include="TimeSeries\myPanel.cs" />
+    <Compile Include="TimeSeries\mySchedule.cs" />
+    <Compile Include="TimeSeries\mySeries.cs" />
+    <Compile Include="Utilities\Date_extension.cs" />
+    <Compile Include="Utilities\Integral.cs" />
+    <Compile Include="Utilities\MailTool.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Dev\README.txt" />
+    <Content Include="Math\README.txt" />
+    <Content Include="Pricing\README.txt" />
+    <Content Include="Simulation\README.txt" />
+    <Content Include="TimeSeries\README.txt" />
+    <Content Include="Utilities\README.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
