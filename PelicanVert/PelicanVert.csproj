@@ -170,6 +170,7 @@
     <Compile Include="Simulation\Strategy\IStrategy.cs" />
     <Compile Include="Simulation\Strategy\MarkitStrategy.cs" />
     <Compile Include="Simulation\Utilities\Utilities.cs" />
+    <Compile Include="Test\testclasse.cs" />
     <Compile Include="TimeSeries\myElement.cs" />
     <Compile Include="TimeSeries\myFrame OLD.cs" />
     <Compile Include="TimeSeries\myFrame.cs" />
