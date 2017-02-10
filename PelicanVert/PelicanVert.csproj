@@ -44,8 +44,8 @@
       <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="QLNet, Version=1.9.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\QLNet.1.9.1\lib\net45\QLNet.dll</HintPath>
+    <Reference Include="QLNet, Version=1.9.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\QLNet.1.9.0.1\lib\net40\QLNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -113,6 +113,13 @@
     <Compile Include="Math\RNG\RandomVariables\StudentRandomVariable.cs" />
     <Compile Include="Math\RNG\RandomVariables\UniformRandomVariable.cs" />
     <Compile Include="Math\RNG\RandomVariables\WeibullRandomVariable.cs" />
+    <Compile Include="Pricing\Credit\cdsHelper.cs" />
+    <Compile Include="Pricing\Credit\MakeCds.cs" />
+    <Compile Include="Pricing\Credit\PiecewiseHazardRateCurve.cs" />
+    <Compile Include="Pricing\Credit\Probability Traits.cs" />
+    <Compile Include="Pricing\GenericInstruments\GenericAutocall.cs" />
+    <Compile Include="Pricing\GenericInstruments\GenericlIntrument.cs" />
+    <Compile Include="Pricing\GenericInstruments\MCGenericInstrument.cs" />
     <Compile Include="Pricing\Instruments\Credit\myCDS.cs" />
     <Compile Include="Pricing\Instruments\Credit\myCDSCurve.cs" />
     <Compile Include="Pricing\Instruments\Derivatives\old_Autocall\EngineFactory.cs" />
@@ -149,6 +156,8 @@
     <Compile Include="Pricing\Instruments\Interest Rates\SwapRates\mySwapRateEURv6m.cs" />
     <Compile Include="Pricing\Instruments\Interest Rates\SwapRates\mySwapRateUSDv3m.cs" />
     <Compile Include="Pricing\Instruments\Utilities\SimulationInstrument.cs" />
+    <Compile Include="Pricing\Volatility\LocalVolSurfaceTolerance.cs" />
+    <Compile Include="Pricing\Volatility\GeneralizedBS_Tolerance.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulation\Cash Manager\CashManager.cs" />
