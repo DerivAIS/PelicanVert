@@ -43,8 +43,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pricing\Instruments de Marc\GenericAutocall.cs" />
+    <Compile Include="Pricing\Instruments de Marc\IGenericInstrument.cs" />
+    <Compile Include="Pricing\Instruments de Marc\MCGenericInstrument.cs" />
+    <Compile Include="Pricing\Instruments de Pascal\Autocall\EngineFactory.cs" />
+    <Compile Include="Pricing\Instruments de Pascal\Autocall\MarkitForwardCurve.cs" />
+    <Compile Include="Pricing\Instruments de Pascal\Autocall\myAutocallEngine.cs" />
+    <Compile Include="Pricing\Instruments de Pascal\Autocall\myExercise.cs" />
+    <Compile Include="Pricing\Instruments de Pascal\Autocall\myInstrument.cs" />
+    <Compile Include="Pricing\Instruments de Pascal\Autocall\myPayoff.cs" />
+    <Compile Include="Pricing\Vol Surface\GeneralizedBlackScholesProcessWithTolerance.cs" />
+    <Compile Include="Pricing\Vol Surface\LocalVolSurfaceWithTolerance.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Valuation\Service SGI\SGIXESPE\SGIXESPE.cs" />
+    <Compile Include="Valuation\Service SGI\_Generic\EquityIndexStrangleStrategy.cs" />
+    <Compile Include="Valuation\Service SGI\_Generic\IEquityIndexStrangleStrategy.cs" />
+    <Compile Include="Valuation\Support PAC\Valmy\BTP_Repack.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

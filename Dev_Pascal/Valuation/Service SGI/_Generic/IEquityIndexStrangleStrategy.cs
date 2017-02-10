@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dev_Pascal
+namespace Pascal.Valuation
 {
-    class Program
+    public interface IEquityIndexStrangleStrategy
     {
-        static void Main(string[] args)
-        {
 
 
-        }
     }
 }
