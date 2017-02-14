@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev_Marc", "Main_mr\Dev_Mar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreditCurveBuilder", "CreditCurveBuilder\CreditCurveBuilder.csproj", "{81B19643-4A70-4415-8A36-11A0F15C4926}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autocall", "Autocall\Autocall.csproj", "{53FB685B-DB85-4F37-8F5D-2413A19F1118}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{81B19643-4A70-4415-8A36-11A0F15C4926}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81B19643-4A70-4415-8A36-11A0F15C4926}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81B19643-4A70-4415-8A36-11A0F15C4926}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53FB685B-DB85-4F37-8F5D-2413A19F1118}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53FB685B-DB85-4F37-8F5D-2413A19F1118}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53FB685B-DB85-4F37-8F5D-2413A19F1118}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53FB685B-DB85-4F37-8F5D-2413A19F1118}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
