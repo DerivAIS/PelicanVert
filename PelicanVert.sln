@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev_Pascal", "Dev_Pascal\De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev_Marc", "Main_mr\Dev_Marc.csproj", "{714932AE-ABB0-4A61-B52E-C7F678E0BB3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreditCurveBuilder", "CreditCurveBuilder\CreditCurveBuilder.csproj", "{81B19643-4A70-4415-8A36-11A0F15C4926}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{714932AE-ABB0-4A61-B52E-C7F678E0BB3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{714932AE-ABB0-4A61-B52E-C7F678E0BB3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{714932AE-ABB0-4A61-B52E-C7F678E0BB3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81B19643-4A70-4415-8A36-11A0F15C4926}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81B19643-4A70-4415-8A36-11A0F15C4926}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81B19643-4A70-4415-8A36-11A0F15C4926}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81B19643-4A70-4415-8A36-11A0F15C4926}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
