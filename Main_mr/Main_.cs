@@ -43,133 +43,7 @@ namespace PelicanVert
             IborIndex swFloatingLegIndex = new Euribor6M();
 
 
-            double zc1yRate = 0.002585;
-            double zc2yRate = 0.005034;
-            double zc3yRate = 0.008981;
-            double zc4yRate = 0.012954;
-            double zc5yRate = 0.016452;
-            double zc7yRate = 0.021811;
-            double zc10yRate = 0.027007;
-            double zc15yRate = 0.031718;
-            double zc20yRate = 0.033834;
-            double zc30yRate = 0.035056;
-
-            DayCounter zcBondsDayCounter = new Actual365Fixed();
-            int fixingDays = 0;
-
-            RateHelper zc1y = new DepositRateHelper(zc1yRate,
-                                             new Period(1, TimeUnit.Years), fixingDays,
-                                             calendar, BusinessDayConvention.ModifiedFollowing,
-                                             true, zcBondsDayCounter);
-            RateHelper zc2y = new DepositRateHelper(zc2yRate,
-                                             new Period(2, TimeUnit.Years), fixingDays,
-                                             calendar, BusinessDayConvention.ModifiedFollowing,
-                                             true, zcBondsDayCounter);
-            RateHelper zc3y = new DepositRateHelper(zc3yRate,
-                                             new Period(3, TimeUnit.Years), fixingDays,
-                                             calendar, BusinessDayConvention.ModifiedFollowing,
-                                             true, zcBondsDayCounter);
-            RateHelper zc4y = new DepositRateHelper(zc4yRate,
-                                             new Period(4, TimeUnit.Years), fixingDays,
-                                             calendar, BusinessDayConvention.ModifiedFollowing,
-                                             true, zcBondsDayCounter);
-            RateHelper zc5y = new DepositRateHelper(zc5yRate,
-                                             new Period(5, TimeUnit.Years), fixingDays,
-                                             calendar, BusinessDayConvention.ModifiedFollowing,
-                                             true, zcBondsDayCounter);
-            RateHelper zc7y = new DepositRateHelper(zc7yRate,
-                                             new Period(7, TimeUnit.Years), fixingDays,
-                                             calendar, BusinessDayConvention.ModifiedFollowing,
-                                             true, zcBondsDayCounter);
-            RateHelper zc10y = new DepositRateHelper(zc10yRate,
-                                             new Period(10, TimeUnit.Years), fixingDays,
-                                             calendar, BusinessDayConvention.ModifiedFollowing,
-                                             true, zcBondsDayCounter);
-            RateHelper zc15y = new DepositRateHelper(zc15yRate,
-                                             new Period(15, TimeUnit.Years), fixingDays,
-                                             calendar, BusinessDayConvention.ModifiedFollowing,
-                                             true, zcBondsDayCounter);
-            RateHelper zc20y = new DepositRateHelper(zc20yRate,
-                                             new Period(20, TimeUnit.Years), fixingDays,
-                                             calendar, BusinessDayConvention.ModifiedFollowing,
-                                             true, zcBondsDayCounter);
-            RateHelper zc30y = new DepositRateHelper(zc30yRate,
-                                            new Period(30, TimeUnit.Years), fixingDays,
-                                            calendar, BusinessDayConvention.ModifiedFollowing,
-                                            true, zcBondsDayCounter);
-
-
-            List<RateHelper> zcInstruments = new List<RateHelper>();
-            zcInstruments.Add(zc1y);
-            zcInstruments.Add(zc2y);
-            zcInstruments.Add(zc3y);
-            zcInstruments.Add(zc4y);
-            zcInstruments.Add(zc5y);
-            zcInstruments.Add(zc7y);
-            zcInstruments.Add(zc10y);
-            zcInstruments.Add(zc15y);
-            zcInstruments.Add(zc20y);
-            zcInstruments.Add(zc30y);
-
-            double tolerance = 1.0e-15;
-
-            YieldTermStructure zcTermStructure = new PiecewiseYieldCurve<Discount, LogLinear>(
-                                                                   settlementDate, zcInstruments,
-                                                                   zcBondsDayCounter,
-                                                                   new List<Handle<Quote>>(),
-                                                                   new List<Date>(),
-                                                                   tolerance);
-
-
-            Handle<YieldTermStructure> zcTermStructureH = new Handle<YieldTermStructure>(zcTermStructure);
-
-
-            CreditDefaultSwapHelper cds1Y = new CreditDefaultSwapHelper(0.6405, new Period(1, TimeUnit.Years), zcTermStructureH);
-            CreditDefaultSwapHelper cds2Y = new CreditDefaultSwapHelper(0.5956, new Period(2, TimeUnit.Years), zcTermStructureH);
-            CreditDefaultSwapHelper cds3Y = new CreditDefaultSwapHelper(0.5511, new Period(3, TimeUnit.Years), zcTermStructureH);
-            CreditDefaultSwapHelper cds4Y = new CreditDefaultSwapHelper(0.5144, new Period(4, TimeUnit.Years), zcTermStructureH);
-            CreditDefaultSwapHelper cds5Y = new CreditDefaultSwapHelper(0.4894, new Period(5, TimeUnit.Years), zcTermStructureH);
-            CreditDefaultSwapHelper cds7Y = new CreditDefaultSwapHelper(0.4511, new Period(7, TimeUnit.Years), zcTermStructureH);
-            CreditDefaultSwapHelper cds10Y = new CreditDefaultSwapHelper(0.4156, new Period(10, TimeUnit.Years), zcTermStructureH);
-            CreditDefaultSwapHelper cds15Y = new CreditDefaultSwapHelper(0.3815, new Period(15, TimeUnit.Years), zcTermStructureH);
-            CreditDefaultSwapHelper cds20Y = new CreditDefaultSwapHelper(0.3657, new Period(20, TimeUnit.Years), zcTermStructureH);
-            CreditDefaultSwapHelper cds30Y = new CreditDefaultSwapHelper(0.3506, new Period(30, TimeUnit.Years), zcTermStructureH);
-
-            List<CreditDefaultSwapHelper> cdsInstruments = new List<CreditDefaultSwapHelper>();
-            cdsInstruments.Add(cds1Y);
-            cdsInstruments.Add(cds2Y);
-            cdsInstruments.Add(cds3Y);
-            cdsInstruments.Add(cds4Y);
-            cdsInstruments.Add(cds5Y);
-            cdsInstruments.Add(cds7Y);
-            cdsInstruments.Add(cds10Y);
-            cdsInstruments.Add(cds15Y);
-            cdsInstruments.Add(cds20Y);
-            cdsInstruments.Add(cds30Y);
-
-            DefaultProbabilityTermStructure defaultTS = new PiecewiseHazardRateCurve<HazardRate, BackwardFlat>(
-                                                                    settlementDate,
-                                                                    cdsInstruments,
-                                                                    dayCounter,
-                                                                    new List<Handle<Quote>>(),
-                                                                    new List<Date>(),
-                                                                    tolerance);
-
-            Handle<DefaultProbabilityTermStructure> defaultTSH = new Handle<DefaultProbabilityTermStructure>(defaultTS);
-
-            double test1 = defaultTSH.link.hazardRate(0.9);
-            double test2 = defaultTSH.link.hazardRate(1.9);
-            double test3 = defaultTSH.link.hazardRate(2.9);
-            double test4 = defaultTSH.link.hazardRate(3.9);
-            double test5 = defaultTSH.link.hazardRate(4.9);
-            double test7 = defaultTSH.link.hazardRate(6.9);
-            double test10 = defaultTSH.link.hazardRate(9.9);
-            double test15 = defaultTSH.link.hazardRate(14.9);
-            double test20 = defaultTSH.link.hazardRate(19.9);
-            double test30 = defaultTSH.link.hazardRate(29.5);
-
             Handle<Quote> underlyingH = new Handle<Quote>(new SimpleQuote(underlying));
-            //Handle<YieldTermStructure> flatTermStructure = new Handle<YieldTermStructure>(new FlatForward(settlementDate, riskFreeRate, dayCounter));
             Handle<YieldTermStructure> flatDividendTS = new Handle<YieldTermStructure>(new FlatForward(settlementDate, dividendYield, dayCounter));
             Handle<BlackVolTermStructure> flatVolTS = new Handle<BlackVolTermStructure>(new BlackConstantVol(settlementDate, calendar, volatility, dayCounter));
 
@@ -182,8 +56,6 @@ namespace PelicanVert
             ////////////////  SIMPLEX  //////////////////////////////////////////////
             /*
             CostFunction corstFunction = new CostFunction();
-
-
 
             List<double> X = new InitializedList<double>();
             X.Add(0.0);
@@ -199,7 +71,6 @@ namespace PelicanVert
 
             Problem myProb = new Problem(corstFunction, constraint, initValues);
             */
-
 
             ////////////////  SURFACE  //////////////////////////////////////////////
 

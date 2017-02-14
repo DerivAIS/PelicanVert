@@ -18,7 +18,6 @@ namespace PelicanVert
         static void Main(string[] args)
         {
 
-
             DateTime timer = DateTime.Now;
 
             // set up dates  ////////////////////////////////////////
@@ -28,8 +27,8 @@ namespace PelicanVert
             Settings.setEvaluationDate(todaysDate);
             DayCounter dayCounter = new Actual365Fixed();
 
-
-
+           
+            
             // Build Rate Curve /////////////////////////////////////
             double zc1yRate = 0.002585;
             double zc2yRate = 0.005034;
@@ -66,7 +65,6 @@ namespace PelicanVert
             RateHelper zc30y = new DepositRateHelper(zc30yRate,new Period(30, TimeUnit.Years), fixingDays,
                                             calendar, BusinessDayConvention.ModifiedFollowing,true, zcBondsDayCounter);
 
-
             List<RateHelper> zcInstruments = new List<RateHelper>();
             zcInstruments.Add(zc1y);
             zcInstruments.Add(zc2y);
@@ -88,10 +86,10 @@ namespace PelicanVert
                                                                    new List<Date>(),
                                                                    tolerance);
 
-
             Handle<YieldTermStructure> zcTermStructureH = new Handle<YieldTermStructure>(zcTermStructure);
 
-
+           
+            
             // Build Credit Curve //////////////////////////////////////
 
             CreditDefaultSwapHelper cds1Y = new CreditDefaultSwapHelper(0.0003, new Period(1, TimeUnit.Years), zcTermStructureH);
@@ -127,9 +125,6 @@ namespace PelicanVert
 
             Handle<DefaultProbabilityTermStructure> defaultTSH = new Handle<DefaultProbabilityTermStructure>(defaultTS);
 
-
-
-
             Console.WriteLine("Hazard and Discount Term Structures");
             Console.WriteLine(" \n");
             int width = 12;
@@ -145,6 +140,8 @@ namespace PelicanVert
                 Console.WriteLine("{0,-" + width + ":0.00%}", zcTermStructureH.link.discount(i));
             }
 
+            
+            
             // End test
             Console.WriteLine(" \nRun completed in {0}", DateTime.Now - timer);
             Console.WriteLine();
