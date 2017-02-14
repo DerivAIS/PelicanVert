@@ -117,9 +117,16 @@ namespace Autocall
                 Console.WriteLine("ProbaCall {1} = {0:0.0000%}", myGenericAutocall.inspout("ProbaCall " + i), i + 1);
             Console.WriteLine("ProbaMid = {0:0.0000%}", myGenericAutocall.inspout("ProbaMid"));
             Console.WriteLine("probaDown = {0:0.0000%}", myGenericAutocall.inspout("ProbaDown"));
-            Console.WriteLine("AvgDown = {0:0.0000%}", myGenericAutocall.inspout("AvgDown") / myGenericAutocall.inspout("ProbaDown"));
+            Console.WriteLine("AvgDown/Proba = {0:0.0000%}", myGenericAutocall.inspout("AvgDown") / myGenericAutocall.inspout("ProbaDown"));
+            
             Console.Write("\n");
+            Console.WriteLine("Test - NoValue = {0:0.0000%}", myGenericAutocall.inspout("NoValue"));
 
+            Console.Write("\n");
+            myGenericAutocall.inspout();
+
+            Console.Write("\n");
+            myGenericAutocall.inspout(2,true);
 
             // End test
             Console.WriteLine(" \nRun completed in {0}", DateTime.Now - timer);
