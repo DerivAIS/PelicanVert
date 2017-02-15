@@ -365,6 +365,8 @@ namespace QLyx.InterestRates
         public void setYieldTermStructure(DateTime argPricingDate)
         {
 
+            if (rateHelpers.Count() == 0) { buildRateHelpers(argPricingDate); }
+
             Date QLsettlementDate = this.CurveCalendar.adjust(new Date(argPricingDate), this.CurveBusinessDayConvention);
 
             this.yieldTermStructure =

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using QLNet;
 
 // internal custom
-using QLyx.Equities;
 using QLyx.DataIO;
 using QLyx.DataIO.Markit;
 using QLyx.Utilities;
@@ -17,7 +16,7 @@ using QLyx.Containers;
 namespace Pascal.Valuation
 {
 
-    public class EquityIndexStrangleStrategy<T> : IEquityIndexStrangleStrategy where T : EquityIndex
+    public class EquityIndexStrangleStrategy : IEquityIndexStrangleStrategy // where T : EquityIndex
     {
 
 
@@ -42,43 +41,37 @@ namespace Pascal.Valuation
 
 
         // Accès aux données de la base via le helper
-        private myFrame EndOfDay(int referenceDBID)
+        private myFrame EndOfDay(int referenceDBID, DateTime startDate = new DateTime(), DateTime endDate = new DateTime())
         {
             IDtoken thisToken = GetToken(referenceDBID);
-            return EndOfDay(thisToken);
+            return EndOfDay(thisToken, startDate, endDate);
         }
 
-        private myFrame EndOfDay(IDtoken referenceToken)
+        private myFrame EndOfDay(IDtoken referenceToken, DateTime startDate = new DateTime(), DateTime endDate = new DateTime())
         {
-            //DateTime startDate = _optionTradeDates.LastOrDefault();
-            //DateTime endDate = _optionTradeDates.FirstOrDefault();
-
-            DateTime startDate = optionTradeDates().LastOrDefault();
-            DateTime endDate = optionTradeDates().FirstOrDefault();
-
+            if (startDate == DateTime.MinValue) { startDate = optionTradeDates().LastOrDefault().ToDateTime(); }
+            if (endDate == DateTime.MinValue) { endDate = optionTradeDates().FirstOrDefault().ToDateTime(); }
+       
             HistoricalDataRequest myRequest = new HistoricalDataRequest(referenceToken, startDate, endDate);
             return _localDatabase.GetEODPrices(myRequest);
         }
 
+        // Helper pour la DB locale
         DatabaseHelper _localDatabase = new DatabaseHelper();
 
 
         // ID des différents elements
-        private Dictionary<int, DBID> strangleMTM_Tokens = new Dictionary<int, DBID>() {{0, new DBID(70)},
-                                                                                    {1, new DBID(71)},
-                                                                                    {2, new DBID(72)},
-                                                                                    {3, new DBID(73)},
-                                                                                    {4, new DBID(74)},
-                                                                                    {5, new DBID(75)},
-                                                                                    {6, new DBID(76)},
-                                                                                    {7, new DBID(77)},
-                                                                                    {8, new DBID(78)},
-                                                                                    {9, new DBID(79)}};
+        private Dictionary<int, DBID> strangleMTM_Tokens = new Dictionary<int, DBID>();
+  
+        // Valeur MtM des différents strangles (contrepartie)
+        private Dictionary<int, double> strangleMTM_CounterpartyPrices = new Dictionary<int, double>();
+        private Dictionary<int, double> strangleMTM_LyxorPrices = new Dictionary<int, double>();
+        private Dictionary<int, double> strangleMTM_thresholds = new Dictionary<int, double>();
 
-        
-        private int _callStrikeID = 68; // SGPXESD1
-        private int _putStrikeID = 69; // SGPXESD2 
-        private int _underlyingID = 61; // SX5E
+        // Identification
+        private DBID _callStrikeID; 
+        private DBID _putStrikeID; 
+        private DBID _underlyingID; 
 
         #endregion
 
@@ -89,14 +82,17 @@ namespace Pascal.Valuation
 
         #region Financial Properties
 
+        // Underlying
+        protected MarkitEquityUnderlying _underlying;
+
         //Number of strangles (of call/put pairs)
-        protected int _numberStrangles = 10;
+        protected int _numberStrangles;
 
         //Spacing between strike of each strangle
-        protected Period _spacing = new Period(1, TimeUnit.Days);
+        protected Period _spacing;
 
         // Calendar
-        protected Calendar _calendar = new TARGET();
+        protected Calendar _calendar = new NullCalendar();
 
         // Calendar
         protected DayCounter _dayCounter = new Actual365Fixed();
@@ -105,10 +101,21 @@ namespace Pascal.Valuation
         protected BusinessDayConvention _bdc = BusinessDayConvention.Preceding;
 
         // Underlying type
-        Type _underlyingType = typeof(T);
+        // Type _underlyingType = typeof(T);
 
         // Valuation Date
         protected DateTime _valuationDate;
+        protected DateTime valuationDate {
+
+            get {
+                return _valuationDate;
+            }
+
+            set {
+                _valuationDate = Adjust(value);
+            }
+
+        }
 
         // Option trade dates
         List<Date> _optionTradeDates;
@@ -127,7 +134,7 @@ namespace Pascal.Valuation
         // Market Data (Markit)
         protected Markit_Equity_IV _marketData;
         protected MarkitSurface marketData(DateTime valuationDate) {
-            if (_marketData == null) { _marketData = Markit_Equity_IV.Instance(MarkitEquityUnderlying.Eurostoxx); }
+            if (_marketData == null) { _marketData = Markit_Equity_IV.Instance(_underlying); }
             return _marketData[valuationDate];
         }
 
@@ -140,7 +147,7 @@ namespace Pascal.Valuation
         // Underlying time series
         protected myFrame _underlyingTimeSeries;
         protected double underlying(DateTime valuationDate) {
-            if (_underlyingTimeSeries == null) { _underlyingTimeSeries = EndOfDay(_underlyingID); }
+            if (_underlyingTimeSeries == null) { _underlyingTimeSeries = EndOfDay((int)_underlyingID); }
             return (double)_underlyingTimeSeries[valuationDate]["Close"];
         }
 
@@ -154,10 +161,10 @@ namespace Pascal.Valuation
         #region Accessors
             
         // Underlying instance (lazy)
-        protected T underlying() { return (T)Activator.CreateInstance(_underlyingType); }
+        // protected T underlying() { return (T)Activator.CreateInstance(_underlyingType); }
 
         // Trade dates
-        //protected List<DateTime> optionTradeDateTime() { return _callOptions.Keys.ToList(); }
+        // protected List<DateTime> optionTradeDateTime() { return _callOptions.Keys.ToList(); }
         
         protected List<Date> optionTradeDates()
         {
@@ -176,24 +183,38 @@ namespace Pascal.Valuation
         // ************************************************************
 
         #region Constuctors
-
-      
+            
         // Generic
-        public EquityIndexStrangleStrategy() { }
+        //public EquityIndexStrangleStrategy() { }
 
         // No Date
-        public EquityIndexStrangleStrategy(int numberStrangles, Period spacing, Calendar calendar)
-            : this(new DateTime(), numberStrangles, spacing, calendar)
-        {
-        }
+        public EquityIndexStrangleStrategy(MarkitEquityUnderlying underlying, int numberStrangles, Period spacing, 
+            Calendar calendar, DBID callStrikeDBID, DBID putStrikeDBID, DBID underlyingDBID, Dictionary<int, DBID> strangleMtM_DBID)
+            : this(new DateTime(), underlying, numberStrangles, spacing, calendar, callStrikeDBID, putStrikeDBID, underlyingDBID, strangleMtM_DBID)
+        { }
 
         // Full fledged
-        public EquityIndexStrangleStrategy(DateTime valuationDate, int numberStrangles, Period spacing, Calendar calendar)
+        public EquityIndexStrangleStrategy(DateTime valuationDate, MarkitEquityUnderlying underlying, int numberStrangles, 
+            Period spacing, Calendar calendar, DBID callStrikeDBID, DBID putStrikeDBID, DBID underlyingDBID, Dictionary<int, DBID> strangleMtM_DBID)
         {
-            _valuationDate = valuationDate;
+
+            // Set the date
+            this.valuationDate = valuationDate;
+
+            // Set the underlying
+            _underlying = underlying;
+            
+            // Set the strategy properties
             _numberStrangles = numberStrangles;
             _spacing = spacing;
             _calendar = calendar;
+
+            // Set the identification (to locate data in the DB)
+            _callStrikeID = callStrikeDBID;
+            _putStrikeID = putStrikeDBID;
+            _underlyingID = underlyingDBID;
+            strangleMTM_Tokens = strangleMtM_DBID;
+
         }
 
         #endregion
@@ -208,7 +229,7 @@ namespace Pascal.Valuation
 
         private double callStrike(int k)
         {
-            if ((k < 0) || (k >= _numberStrangles)) { throw new ArgumentException("", ""); }
+            if ((k < 0) || (k >= _numberStrangles)) { throw new ArgumentException("CallStrikesMismatch", "Number of strikes does not match the number of options."); }
             if (_callStrikes.Count() == 0 || _callStrikes == null) { SetCallStrikes(); }
             return _callStrikes[k];
         }
@@ -216,7 +237,7 @@ namespace Pascal.Valuation
 
         private double putStrike(int k)
         {
-            if ((k < 0) || (k >= _numberStrangles)) { throw new ArgumentException("", ""); }
+            if ((k < 0) || (k >= _numberStrangles)) { throw new ArgumentException("PutStrikesMismatch", "Number of strikes does not match the number of options."); }
             if (_putStrikes.Count() == 0 || _putStrikes == null) { SetPutStrikes(); }
             return _putStrikes[k];
         }
@@ -228,7 +249,7 @@ namespace Pascal.Valuation
         private void SetCallStrikes()
         {
             int cnt = 0;
-            myFrame data = EndOfDay(_callStrikeID);
+            myFrame data = EndOfDay((int)_callStrikeID);
             //if (data.data.Count() != _numberStrangles) { throw new ArgumentException("",""); }
             foreach (DateTime dt in _optionTradeDates) {
                 double strike = (double)data[dt].data["Close"];
@@ -241,7 +262,7 @@ namespace Pascal.Valuation
         private void SetPutStrikes()
         {
             int cnt = 0;
-            myFrame data = EndOfDay(_putStrikeID);
+            myFrame data = EndOfDay((int)_putStrikeID);
             //if (data.data.Count() != _numberStrangles) { throw new ArgumentException("", ""); }
             foreach (DateTime dt in _optionTradeDates)
             {
@@ -319,11 +340,11 @@ namespace Pascal.Valuation
             // *************************************
             foreach (Guid id in _callOptions.Keys) {
 
-                DateTime expiry = _callOptions[id].exercise().dates().FirstOrDefault();
-                double strikeMoneyness = _callOptions[id].strikeLevel / currentSpot;
-                Settings.setEvaluationDate(valuationDate);
-                _callOptions[id].setPricingEngine(GetEngine(_valuationDate, expiry, underlying(_valuationDate), strikeMoneyness));
-                _call_NPV[id] = _callOptions[id].NPV();
+                DateTime expiry = _callOptions[id].exercise().dates().LastOrDefault();
+                double strikeMoneyness = _callOptions[id]._strikeLevel / currentSpot;
+                // Settings.setEvaluationDate(valuationDate);
+                //_callOptions[id].setPricingEngine(PricingEngine(_valuationDate, expiry, underlying(_valuationDate), strikeMoneyness));
+                _call_NPV[id] = _callOptions[id].NPV(valuationDate, PricingEngine(_valuationDate, expiry, underlying(_valuationDate), strikeMoneyness));
             }
 
 
@@ -333,23 +354,23 @@ namespace Pascal.Valuation
             foreach (Guid id in _putOptions.Keys)
             {
 
-                DateTime expiry = _putOptions[id].exercise().dates().FirstOrDefault();
+                DateTime expiry = _putOptions[id].exercise().dates().LastOrDefault();
                 double strikeMoneyness = _putOptions[id].strikeMoneyness;
-                Settings.setEvaluationDate(valuationDate);
-                _putOptions[id].setPricingEngine(GetEngine(_valuationDate, expiry, underlying(_valuationDate), strikeMoneyness));
-                _put_NPV[id] = _putOptions[id].NPV();
+                // Settings.setEvaluationDate(valuationDate);
+                // _putOptions[id].setPricingEngine(PricingEngine(_valuationDate, expiry, underlying(_valuationDate), strikeMoneyness));
+                _put_NPV[id] = _putOptions[id].NPV(valuationDate, PricingEngine(_valuationDate, expiry, underlying(_valuationDate), strikeMoneyness));
             }
         }
 
 
-        private IPricingEngine GetEngine(DateTime valuationDate, DateTime expiryDate, double currentSpot, double strikeMoneyness)
+        private IPricingEngine PricingEngine(DateTime valuationDate, DateTime expiryDate, double currentSpot, double strikeMoneyness)
         {
             return new AnalyticEuropeanEngine(GetStochasticProcess(valuationDate, expiryDate, currentSpot, strikeMoneyness));
         }
 
 
 
-        protected GeneralizedBlackScholesProcess GetStochasticProcess(DateTime valuationDate, DateTime expiryDate, double currentSpot, double strikeMoneyness)
+        protected GeneralizedBlackScholesProcessTolerance GetStochasticProcess(DateTime valuationDate, DateTime expiryDate, double currentSpot, double strikeMoneyness)
         {
             // Sous-jacent : Spot Markit
             // Handle<Quote> underlyingH = new Handle<Quote>(new SimpleQuote(marketData(_valuationDate).impliedSpot));
@@ -370,11 +391,30 @@ namespace Pascal.Valuation
             // BlackVarianceCurve blackVol = marketData_valuationDate).ATMF_Vol_TS(_valuationDate);
 
             // Volatility Single vol point (flat forward)
-            double volatility = marketData(valuationDate)[expiryDate][strikeMoneyness];
-            var blackVol = new Handle<BlackVolTermStructure>(new BlackConstantVol(_valuationDate, _calendar, volatility, _dayCounter));
+            // double volatility = marketData(valuationDate)[expiryDate][strikeMoneyness];
+            // var blackVol = new Handle<BlackVolTermStructure>(new BlackConstantVol(_valuationDate, _calendar, volatility, _dayCounter));
 
+            // Volatility Surface
+            
+            Matrix volMat = marketData(_valuationDate).VolMatrix();
+            List<Date> dates = marketData(_valuationDate).Dates();
+            Calendar cal = marketData(_valuationDate).calendar();
+            List<double> strikes = marketData(_valuationDate).Strikes(currentSpot); // double en argument correspondant au spot de pricing
+
+            BlackVarianceSurface mySurface = new BlackVarianceSurface(_valuationDate,
+                                                                    cal,
+                                                                    dates,
+                                                                    strikes,
+                                                                    volMat,
+                                                                    marketData(_valuationDate).dayCounter());
+
+            Handle<BlackVolTermStructure> mySurfaceH = new Handle<BlackVolTermStructure>(mySurface);
+            GeneralizedBlackScholesProcessTolerance bsmProcessVolSurface = new GeneralizedBlackScholesProcessTolerance(underlyingH, DivTermStructure, RateTermStructure, mySurfaceH);
+            
+            
             // Return
-            return new GeneralizedBlackScholesProcess(underlyingH, DivTermStructure, RateTermStructure, blackVol);
+            //return new GeneralizedBlackScholesProcess(underlyingH, DivTermStructure, RateTermStructure, blackVol);
+            return bsmProcessVolSurface;
 
         }
 
@@ -455,15 +495,16 @@ namespace Pascal.Valuation
         {
 
             // Instanciate
-            OptionPosition optionPosition = new OptionPosition(Payoff(optionType, strikeLevel) as StrikedTypePayoff, Exercise(maturity));
+            OptionPosition optionPosition = new OptionPosition(Payoff(optionType, strikeLevel) as StrikedTypePayoff, Exercise(maturity), tradeDate, spotAtStrikeDate, _dayCounter);
 
             // Set internal properties:
             // Levels
-            optionPosition.strikeLevel = strikeLevel;
-            optionPosition.spotAtStrike = spotAtStrikeDate;
+            optionPosition._strikeLevel = strikeLevel;
+            optionPosition._spotAtStrike = spotAtStrikeDate;
+
             // Dates
-            optionPosition.expiryDate = maturity;
-            optionPosition.tradeDate = tradeDate;
+            // optionPosition.expiryDate = maturity;
+            // optionPosition.tradeDate = tradeDate;
 
             // Return
             return optionPosition;
@@ -484,8 +525,75 @@ namespace Pascal.Valuation
 
 
         // ************************************************************
+        // METHODS FOR COMPARAISON AND OUTPUT
+        // ************************************************************
+
+        private void Strangle_CounterpartyPrices(DateTime valuationDate)
+        {
+            // Loop through the various IDtoken to fetch SG's price
+            foreach (int k in strangleMTM_Tokens.Keys) {
+
+                myFrame MtM_strangle = EndOfDay(strangleMTM_Tokens[k], valuationDate, valuationDate);
+                double valueMtM = (double)MtM_strangle[valuationDate]["Close"];
+                strangleMTM_CounterpartyPrices[k] = valueMtM;
+            }
+        }
+        
+
+        private void Strangle_LyxorPrices(DateTime valuationDate){
+            for (int k=0; k < _numberStrangles; k++) {
+
+                // Set the prices for the strangle
+                double px_strangle = _putOptions.ElementAt(k).Value.price() + _callOptions.ElementAt(k).Value.price();
+                strangleMTM_LyxorPrices[k] = px_strangle;
+
+                // Set the threshold
+                double threshold = _putOptions.ElementAt(k).Value.threshold() + _callOptions.ElementAt(k).Value.threshold();
+                strangleMTM_thresholds[k] = threshold;
+
+            }
+        }
+
+
+        public void Results() {
+
+            _compute_NPV();
+
+            Strangle_CounterpartyPrices(_valuationDate);
+            Strangle_LyxorPrices(_valuationDate);
+
+            Console.WriteLine();
+            Console.WriteLine("*******************************************************************************");
+            Console.WriteLine("Pricing Date : {0}", _valuationDate.ToDate());
+            Console.WriteLine("Item \t Lyxor \t SG  \t Gap \t Threshold \t OK/KO");
+            Console.WriteLine();
+
+            for (int k = 0; k < _numberStrangles; k++){
+
+                double lyx_bps = Math.Round(10000 * strangleMTM_LyxorPrices[k], 2);
+                double sg_bps = Math.Round(100 * strangleMTM_CounterpartyPrices[k],2);
+                double gap_bps = Math.Round(Math.Abs(lyx_bps-sg_bps), 2);
+                double th_bps = Math.Round(10000 * strangleMTM_thresholds[k],2);
+
+                string OK_KO = "NOT OK";
+                if (Math.Abs(sg_bps-lyx_bps) <= th_bps) { OK_KO = "OK"; }
+
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t\t{5}", k+1, lyx_bps, sg_bps, gap_bps, th_bps, OK_KO);
+                //Console.WriteLine("---------------------------------------------------");
+
+            }
+
+            Console.WriteLine("*******************************************************************************");
+
+        }
+
+        
+
+        // ************************************************************
         // SUBCLASS (INTERNAL)
         // ************************************************************
+
+        #region Sub Class : OptionPosition
 
         protected class OptionPosition {
 
@@ -493,51 +601,96 @@ namespace Pascal.Valuation
             // Option
             public VanillaOption _option;
 
+            // Valuation
+            public double _price_points;
+            public double _price_relative;
+            public double _delta;
+            public double _vega;
 
+            // Calendar and Day Counters
+            public DayCounter _dayCounter = new Actual365Fixed();
+            
             // Dates
-            public DateTime tradeDate;
-            public DateTime expiryDate;
+            public DateTime _tradeDate;
+            public DateTime _expiryDate;
+            public DateTime _pricingDate;
 
 
             // Levels
-            public double strikeLevel;
-            public double spotAtStrike;
-            public double strikeMoneyness { get { return strikeLevel / spotAtStrike; } }
+            public double _strikeLevel;
+            public double _spotAtStrike;
+            public double strikeMoneyness { get { return _strikeLevel / _spotAtStrike; } }
             public Exercise exercise() { return _option.exercise(); } 
             public Payoff payoff() { return _option.payoff(); }
+            public double TTM() { return _dayCounter.yearFraction(_pricingDate, _expiryDate); }
+
+            public double price() { return _price_relative; }
+
+
+            // Threshold / Pricing policy
+            double base_threshold = 0.0050;
+            double delta_threshold = 0.0030;
+            double vega_threshold = 0.0300;
 
 
             // Constructor
-            public OptionPosition(StrikedTypePayoff payoff, Exercise exercise)
+            public OptionPosition(StrikedTypePayoff payoff, Exercise exercise, DateTime TradeDate, double SpotAtStrikeDate, DayCounter dayCounter)
             {
                 _option = new VanillaOption(payoff, exercise);
+                _dayCounter = dayCounter;
+                _expiryDate = exercise.lastDate();
+                _spotAtStrike = SpotAtStrikeDate;
+                _tradeDate = TradeDate;
             }
 
 
             // Methods
-            public void setPricingEngine(IPricingEngine engine) {
-                _option.setPricingEngine(engine);
-            }
-
-            public double NPV()
+            public double NPV(DateTime pricingDate, IPricingEngine engine)
             {
-                Console.WriteLine("**************************************");
-                Console.WriteLine("NPV for option traded : {0}", tradeDate);
-                Console.WriteLine("**************************************");
+                // Set the pricing date
+                _pricingDate = pricingDate;
+                Settings.setEvaluationDate(pricingDate);
 
-                double prix_points_indice = _option.NPV();
-                return prix_points_indice / spotAtStrike;
+                // Set the pricing engine
+                _option.setPricingEngine(engine);
+
+                _price_points = _option.NPV();
+                _price_relative = _price_points / _spotAtStrike;
+
+                return _price_relative;
             }
 
 
+            // Threshold / Pricing Policy
+            public double threshold() {
+
+                double basic = Basic_Threshold();
+                double delta = Delta_threshold();
+                double vega = Vega_threshold();
+
+                return (basic + delta + vega);
+            }
 
 
+            private double Basic_Threshold()
+            {
+                return Math.Sqrt(TTM()) * base_threshold;
+            }
 
 
+            private double Delta_threshold()
+            {
+                return _delta * TTM() * delta_threshold;
+            }
 
+            private double Vega_threshold()
+            {
+                return _vega * vega_threshold;
+            }
 
+            #endregion
 
-
+            
 
 
         }

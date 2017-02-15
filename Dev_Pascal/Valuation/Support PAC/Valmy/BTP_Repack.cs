@@ -40,7 +40,7 @@ namespace Pascal.Valuation
 
 
         // Rate Curve
-        myRateCurve _rateCurve;
+        myRateCurveEURv3m _rateCurve;
 
 
         // Date
@@ -87,7 +87,6 @@ namespace Pascal.Valuation
         public BTP_Repack(DateTime valuationDate) : base()
         {
             _valuationDate = valuationDate;
-            _rateCurve = new myRateCurve();
         }
 
         
@@ -116,25 +115,12 @@ namespace Pascal.Valuation
 
         public void SetBondCouponSchedule()
         {
-            if (_valuationDate == DateTime.MinValue) { throw new ArgumentException("ValuationDateException","No valuation date provided."); }
+            if (_valuationDate == DateTime.MinValue) { throw new ArgumentException("ValuationDateException", "No valuation date provided."); }
             SetBondCouponSchedule(_valuationDate);
         }
 
-
-        protected DateTime Adjust(DateTime dateTime)
-        {
-            Date d = _calendar.adjust(dateTime.ToDate(), _bdc);
-            return d.ToDateTime();
-        }
-
-
-        protected Date Adjust(Date date)
-        {
-            return _calendar.adjust(date, _bdc);
-        }
-
-
-        public double NPV_BondCoupons()
+        
+        public double NPV_BondCoupons_Markit()
         {
 
             Date currentDate = _valuationDate.ToDate();
@@ -153,22 +139,38 @@ namespace Pascal.Valuation
             return NPV_BondCoupons;
             
         }
+        
+        public double NPV_BondCoupons_QuantLib()
+        {
+            Date currentDate = _valuationDate.ToDate();
 
+            EUR_Coupon_Stream cpn = new EUR_Coupon_Stream(_bondSchedule);
+            cpn.PV_v3m(currentDate);
+            double px = cpn.PV_v3m(currentDate);
+            return px;
+
+        }
 
         public double GetBondPrice()
         {
-
-
             return 0.0;
         }
 
 
         // ************************************************************
-        // METHODS -- BOND SCHEDULE
+        // METHODS -- DATE ADJUSTMENT
         // ************************************************************
 
+        protected DateTime Adjust(DateTime dateTime)
+        {
+            Date d = _calendar.adjust(dateTime.ToDate(), _bdc);
+            return d.ToDateTime();
+        }
 
-
+        protected Date Adjust(Date date)
+        {
+            return _calendar.adjust(date, _bdc);
+        }
 
 
 

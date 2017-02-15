@@ -11,11 +11,9 @@ using QLNet;
 
 namespace QLyx.DataIO
 {
-    class DataReader
+    public class DataReader
     {
-
         
-
         // ************************************************************
         // INSTANCE PROPERTIES - CUSTOM OBJECTS
         // ************************************************************

@@ -10,34 +10,34 @@ namespace QLyx.DataIO.Markit
     {
 
         // EuroStoxx50 Excess Return
-        Eurostoxx = 0,
+        Eurostoxx = 61,
 
         // EuroStoxx50 Total Return
-        Eurostoxx_TR = 1,
+        Eurostoxx_TR = 62,
 
         // S&P500 Excess Return
-        SP_500 = 2,
+        SP_500 = 112,
 
         // S&P500 Total Return = SPXT INDEX
-        SP_500_TR = 3,
+        SP_500_TR = 134,
 
         // CAC40 = CAC INDEX
-        CAC40 = 4,
+        CAC40 = 135,
 
-        // S&P500 Total Return = SPXT INDEX
-        EPRA = 5,
+        // EPRA NAREIT = EPRA INDEX
+        EPRA = 140,
 
         // FTSE 100 = UKX INDEX
-        FTSE_100 = 6,
+        FTSE_100 = 136,
 
         // SWISS SMI = SMI INDEX
-        SMI = 7,
+        SMI = 137,
 
         // TOPIX = TPX INDEX
-        TOPIX = 8,
+        TOPIX = 138,
 
         // TOPIX = TPX INDEX
-        NIKKEI_225 = 9
+        NIKKEI_225 = 139
 
     }
 }

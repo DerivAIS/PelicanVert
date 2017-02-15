@@ -14,7 +14,7 @@ using QLyx.DataIO;
 
 namespace QLyx.InterestRates
 {
-    class myRateCurveUSD : myRateCurve
+    public class myRateCurveUSD : myRateCurve
     {
 
         // ************************************************************

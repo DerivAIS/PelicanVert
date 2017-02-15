@@ -14,7 +14,7 @@ using QLyx.DataIO;
 
 namespace QLyx.InterestRates
 {
-    abstract class myDepositRate : myRate
+    public abstract class myDepositRate : myRate
     {
 
 

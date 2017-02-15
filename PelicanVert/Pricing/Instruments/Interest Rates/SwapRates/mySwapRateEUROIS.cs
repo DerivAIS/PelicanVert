@@ -14,7 +14,7 @@ namespace QLyx.InterestRates
 {
 
 
-    abstract class mySwapRateEUROIS : mySwapRate
+    abstract public class mySwapRateEUROIS : mySwapRate
     {
 
 
@@ -91,7 +91,7 @@ namespace QLyx.InterestRates
 
 
 
-    class myEurSwapRate1YOIS : mySwapRateEUROIS
+    public class myEurSwapRate1YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate1YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(1, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE1 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -101,7 +101,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myEurSwapRate2YOIS : mySwapRateEUROIS
+    public class myEurSwapRate2YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate2YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(2, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE2 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -111,7 +111,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myEurSwapRate3YOIS : mySwapRateEUROIS
+    public class myEurSwapRate3YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate3YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(3, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE3 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -120,7 +120,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(3, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE3 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate4YOIS : mySwapRateEUROIS
+    public class myEurSwapRate4YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate4YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(4, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE4 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -129,7 +129,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(4, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE4 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate5YOIS : mySwapRateEUROIS
+    public class myEurSwapRate5YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate5YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(5, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE5 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -138,7 +138,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(5, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE5 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate6YOIS : mySwapRateEUROIS
+    public class myEurSwapRate6YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate6YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(6, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE6 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -147,7 +147,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(6, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE6 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate7YOIS : mySwapRateEUROIS
+    public class myEurSwapRate7YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate7YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(7, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE7 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -156,7 +156,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(7, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE7 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate8YOIS : mySwapRateEUROIS
+    public class myEurSwapRate8YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate8YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(8, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE8 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -165,7 +165,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(8, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE8 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate9YOIS : mySwapRateEUROIS
+    public class myEurSwapRate9YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate9YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(9, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE9 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -174,7 +174,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(9, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE9 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate10YOIS : mySwapRateEUROIS
+    public class myEurSwapRate10YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate10YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(10, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE10 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -183,7 +183,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(10, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE10 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate11YOIS : mySwapRateEUROIS
+    public class myEurSwapRate11YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate11YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(11, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE11 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -192,7 +192,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(11, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE11 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate12YOIS : mySwapRateEUROIS
+    public class myEurSwapRate12YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate12YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(12, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE12 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -201,7 +201,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(12, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE12 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate15YOIS : mySwapRateEUROIS
+    public class myEurSwapRate15YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate15YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(15, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE15 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -210,7 +210,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(15, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE15 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate20YOIS : mySwapRateEUROIS
+    public class myEurSwapRate20YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate20YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(20, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE20 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -219,7 +219,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(20, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE20 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate25YOIS : mySwapRateEUROIS
+    public class myEurSwapRate25YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate25YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(25, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE25 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -228,7 +228,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(25, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE25 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate30YOIS : mySwapRateEUROIS
+    public class myEurSwapRate30YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate30YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(30, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE30 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -237,7 +237,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(30, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE30 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate35YOIS : mySwapRateEUROIS
+    public class myEurSwapRate35YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate35YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(35, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE35 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -246,7 +246,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(35, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE35 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate40YOIS : mySwapRateEUROIS
+    public class myEurSwapRate40YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate40YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(40, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE40 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -255,7 +255,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(40, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE40 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate45YOIS : mySwapRateEUROIS
+    public class myEurSwapRate45YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate45YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(45, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE45 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
@@ -264,7 +264,7 @@ namespace QLyx.InterestRates
             : base(PricingDate_: argPricingDate, Frequency_: Frequency.Annual, Period_: new Period(45, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE45 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }
     }
 
-    class myEurSwapRate50YOIS : mySwapRateEUROIS
+    public class myEurSwapRate50YOIS : mySwapRateEUROIS
     {
         public myEurSwapRate50YOIS()
             : base(PricingDate_: DateTime.Today, Frequency_: Frequency.Annual, Period_: new Period(50, TimeUnit.Years), argDBID_: TokenFactory.New(Bloomberg: "EUSWE50 Curncy"), ForwardStart_: new Period(2, TimeUnit.Days), SwapFixedLegBDC_: BusinessDayConvention.ModifiedFollowing, SwapFixedLegDayCounter_: new Thirty360(), SwapFloatingLegIndex_: new Eonia()) { }

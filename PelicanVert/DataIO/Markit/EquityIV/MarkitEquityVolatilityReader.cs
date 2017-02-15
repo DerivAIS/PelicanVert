@@ -23,7 +23,7 @@ namespace QLyx.DataIO.Markit
 
         // Properties
         protected static readonly Dictionary<string, string> MarkitFileNames = new Dictionary<string, string>() {
-                            {"SPX", "Lyxor_ExchangeCloseSPUS_EQVol_Index_Exchange_" },
+                            {"SP", "Lyxor_ExchangeCloseSPUS_EQVol_Index_Exchange_" },
                             {"STOXX", "Lyxor_ExchangeCloseSTOXX_EQVol_Index_Exchange_" },
                             {"LSE", "Lyxor_ExchangeCloseLSE_EQVol_Index_Exchange_"},
                             {"SWIND", "Lyxor_ExchangeCloseSWIND_EQVol_Index_Exchange_"},
@@ -84,11 +84,11 @@ namespace QLyx.DataIO.Markit
 
                 case MarkitEquityUnderlying.SP_500:
                     Console.WriteLine("Reading Markit S&P500 Excess Return volatility data.");
-                    return (partialFilePath_new + MarkitFileNames["SPUS"] + dateString() + fileExtension);
+                    return (partialFilePath_new + MarkitFileNames["SP"] + dateString() + fileExtension);
 
                 case MarkitEquityUnderlying.SP_500_TR:
                     Console.WriteLine("Reading Markit S&P500 Total Return volatility data.");
-                    return (partialFilePath_new + MarkitFileNames["SPUS"] + dateString() + fileExtension);
+                    return (partialFilePath_new + MarkitFileNames["SP"] + dateString() + fileExtension);
 
                 case MarkitEquityUnderlying.EPRA:
                     Console.WriteLine("Reading Markit EPRA volatility data.");
@@ -100,7 +100,7 @@ namespace QLyx.DataIO.Markit
 
                 case MarkitEquityUnderlying.CAC40:
                     Console.WriteLine("Reading Markit CAC40 Excess Return volatility data.");
-                    return (partialFilePath_new + MarkitFileNames["NYSEIND"] + dateString() + fileExtension);
+                    return (partialFilePath_new + MarkitFileNames["NYSE"] + dateString() + fileExtension);
 
                 case MarkitEquityUnderlying.SMI:
                     Console.WriteLine("Reading Markit Swiss SMI Excess Return volatility data.");

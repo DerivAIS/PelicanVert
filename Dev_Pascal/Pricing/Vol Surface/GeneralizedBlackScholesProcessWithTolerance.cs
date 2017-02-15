@@ -4,19 +4,23 @@ using System;
 namespace QLNet
 {
 
-    public class GeneralizedBlackScholesProcessTest : StochasticProcess1D
+    public class GeneralizedBlackScholesProcessTol : GeneralizedBlackScholesProcess
     {
 
-        public GeneralizedBlackScholesProcessTest(Handle<Quote> x0, Handle<YieldTermStructure> dividendTS,
+        /*public GeneralizedBlackScholesProcessTolerance(Handle<Quote> x0, Handle<YieldTermStructure> dividendTS,
            Handle<YieldTermStructure> riskFreeTS, Handle<BlackVolTermStructure> blackVolTS, IDiscretization1D disc = null)
-            : base(disc ?? new EulerDiscretization())
+            : base(disc ?? new EulerDiscretization())*/
+
+        public GeneralizedBlackScholesProcessTol(Handle<Quote> x0, Handle<YieldTermStructure> dividendTS,
+           Handle<YieldTermStructure> riskFreeTS, Handle<BlackVolTermStructure> blackVolTS, IDiscretization1D disc = null)
+            : base(x0, dividendTS, riskFreeTS, blackVolTS, disc)
         {
             x0_ = x0;
             riskFreeRate_ = riskFreeTS;
             dividendYield_ = dividendTS;
             blackVolatility_ = blackVolTS;
             updated_ = false;
-
+            
             x0_.registerWith(update);
             riskFreeRate_.registerWith(update);
             dividendYield_.registerWith(update);
@@ -172,7 +176,7 @@ namespace QLNet
                 }
 
                 // ok, so it's strike-dependent. Never mind.
-                localVolatility_.linkTo(new LocalVolSurfaceTest(blackVolatility_, riskFreeRate_, dividendYield_,
+                localVolatility_.linkTo(new LocalVolSurfaceTolerance(blackVolatility_, riskFreeRate_, dividendYield_,
                    x0_));
                 updated_ = true;
                 isStrikeIndependent_ = false;

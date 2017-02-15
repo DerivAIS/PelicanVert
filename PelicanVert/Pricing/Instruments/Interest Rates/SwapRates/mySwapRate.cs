@@ -13,7 +13,7 @@ using QLyx.DataIO;
 
 namespace QLyx.InterestRates
 {
-    class mySwapRate : myRate
+    public class mySwapRate : myRate
     {
 
 

@@ -4,13 +4,13 @@ using System;
 namespace QLNet
 {
 
-    public class LocalVolSurfaceTest : LocalVolSurface
+    public class LocalVolSurfaceTol : LocalVolSurface
     {
         Handle<BlackVolTermStructure> blackTS_;
         Handle<YieldTermStructure> riskFreeTS_, dividendTS_;
         Handle<Quote> underlying_;
 
-        public LocalVolSurfaceTest(Handle<BlackVolTermStructure> blackTS, Handle<YieldTermStructure> riskFreeTS,
+        public LocalVolSurfaceTol(Handle<BlackVolTermStructure> blackTS, Handle<YieldTermStructure> riskFreeTS,
                                Handle<YieldTermStructure> dividendTS, Handle<Quote> underlying)
             : base(blackTS, riskFreeTS, dividendTS, underlying)
         {

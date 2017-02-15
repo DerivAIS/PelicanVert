@@ -13,9 +13,8 @@ using QLyx.DataIO;
 
 namespace QLyx.InterestRates
 {
-
-
-    class myDepositRateUSD : myDepositRate
+    
+    public class myDepositRateUSD : myDepositRate
     {
 
         // ************************************************************
@@ -80,7 +79,7 @@ namespace QLyx.InterestRates
 
     #region
 
-    class myFedFunds : myDepositRateUSD
+    public class myFedFunds : myDepositRateUSD
     {
         public myFedFunds()
             : base(PricingDate_: DateTime.Today, Period_: new Period(1, TimeUnit.Days), argDBID_: TokenFactory.New(Bloomberg: "US00O/N Index"), FixingDays_: 0, BDC_: BusinessDayConvention.Following, DayCounter_: new Actual360()) { }
@@ -90,7 +89,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myUSTN : myDepositRateUSD
+    public class myUSTN : myDepositRateUSD
     {
         public myUSTN()
             : base(PricingDate_: DateTime.Today, Period_: new Period(1, TimeUnit.Days), argDBID_: TokenFactory.New(Bloomberg: "USDR2T Index"), FixingDays_: 1, BDC_: BusinessDayConvention.Following, DayCounter_: new Actual360()) { }
@@ -100,7 +99,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myUSLibor1W : myDepositRateUSD
+    public class myUSLibor1W : myDepositRateUSD
     {
         public myUSLibor1W()
             : base(PricingDate_: DateTime.Today, Period_: new Period(1, TimeUnit.Weeks), argDBID_: TokenFactory.New(Bloomberg: "US0001W Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -110,7 +109,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myUSLibor2W : myDepositRateUSD
+    public class myUSLibor2W : myDepositRateUSD
     {
         public myUSLibor2W()
             : base(PricingDate_: DateTime.Today, Period_: new Period(2, TimeUnit.Weeks), argDBID_: TokenFactory.New(Bloomberg: "US0002W Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -120,7 +119,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myUSLibor1M : myDepositRateUSD
+    public class myUSLibor1M : myDepositRateUSD
     {
         public myUSLibor1M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(1, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "US0001M Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Thirty360()) { }
@@ -130,7 +129,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myUSLibor2M : myDepositRateUSD
+    public class myUSLibor2M : myDepositRateUSD
     {
         public myUSLibor2M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(2, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "US0002M Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Thirty360()) { }
@@ -140,7 +139,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myUSLibor3M : myDepositRateUSD
+    public class myUSLibor3M : myDepositRateUSD
     {
         public myUSLibor3M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(3, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "US0003M Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Thirty360()) { }
@@ -150,7 +149,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myUSLibor6M : myDepositRateUSD
+    public class myUSLibor6M : myDepositRateUSD
     {
         public myUSLibor6M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(6, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "US0006M Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Thirty360()) { }
@@ -160,7 +159,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myUSLibor9M : myDepositRateUSD
+    public class myUSLibor9M : myDepositRateUSD
     {
         public myUSLibor9M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(9, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "US0009M Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Thirty360()) { }
@@ -170,7 +169,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myUSLibor12M : myDepositRateUSD
+    public class myUSLibor12M : myDepositRateUSD
     {
         public myUSLibor12M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(12, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "US0012M Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Thirty360()) { }

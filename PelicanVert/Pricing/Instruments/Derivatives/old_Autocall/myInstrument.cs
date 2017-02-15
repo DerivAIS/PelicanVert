@@ -32,7 +32,7 @@ namespace QLyx.Instruments.Derivatives
 
         public myAutocall() : base() { }
 
-        public myAutocall(Date valuationDate, AutocallExercise exercise, AutocallPayoff payoff) : base()
+        public myAutocall(QLNet.Date valuationDate, AutocallExercise exercise, AutocallPayoff payoff) : base()
         {
 
             // Assign dates

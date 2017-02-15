@@ -491,7 +491,13 @@ namespace QLyx.DataIO.Connector
                 // Execute SQL command
                 using (var connection = new MySqlConnection(connectionString))
                 {
-                    connection.Execute(InsertUndlDataEOD, argLineToInsert);
+                    try
+                    {
+                        connection.Execute(InsertUndlDataEOD, argLineToInsert);
+                    }
+                    catch {
+                        // tbd
+                    }
                 }
             }
 

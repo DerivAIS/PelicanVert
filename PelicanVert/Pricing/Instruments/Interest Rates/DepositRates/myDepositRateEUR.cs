@@ -13,9 +13,7 @@ using QLyx.DataIO;
 
 namespace QLyx.InterestRates
 {
-
-
-    class myDepositRateEUR : myDepositRate // la super classe est vide
+    public class myDepositRateEUR : myDepositRate // la super classe est vide
     {
 
         // ************************************************************
@@ -80,7 +78,7 @@ namespace QLyx.InterestRates
 
     #region
 
-    class myEONIA : myDepositRateEUR
+    public class myEONIA : myDepositRateEUR
     {
         public myEONIA()
             : base(PricingDate_: DateTime.Today, Period_: new Period(1, TimeUnit.Days), argDBID_: TokenFactory.New(Bloomberg: "EONIA Index"), FixingDays_: 0, BDC_: BusinessDayConvention.Following, DayCounter_: new Actual360()) { }
@@ -90,7 +88,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myTomorrowNext : myDepositRateEUR
+    public class myTomorrowNext : myDepositRateEUR
     {
         public myTomorrowNext()
             : base(PricingDate_: DateTime.Today, Period_: new Period(1, TimeUnit.Days), argDBID_: TokenFactory.New(Bloomberg: "EUDR2T Index"), FixingDays_: 1, BDC_: BusinessDayConvention.Following, DayCounter_: new Actual360()) { }
@@ -100,7 +98,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myEuribor1W : myDepositRateEUR
+    public class myEuribor1W : myDepositRateEUR
     {
         public myEuribor1W()
             : base(PricingDate_: DateTime.Today, Period_: new Period(1, TimeUnit.Weeks), argDBID_: TokenFactory.New(Bloomberg: "EUR001W Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -110,7 +108,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myEuribor2W : myDepositRateEUR
+    public class myEuribor2W : myDepositRateEUR
     {
         public myEuribor2W()
             : base(PricingDate_: DateTime.Today, Period_: new Period(2, TimeUnit.Weeks), argDBID_: TokenFactory.New(Bloomberg: "EUR002W Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -120,7 +118,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myEuribor1M : myDepositRateEUR
+    public class myEuribor1M : myDepositRateEUR
     {
         public myEuribor1M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(1, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUR001M Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Thirty360()) { }
@@ -130,7 +128,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myEuribor2M : myDepositRateEUR
+    public class myEuribor2M : myDepositRateEUR
     {
         public myEuribor2M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(2, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUR002M Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Thirty360()) { }
@@ -140,7 +138,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myEuribor3M : myDepositRateEUR
+    public class myEuribor3M : myDepositRateEUR
     {
         public myEuribor3M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(3, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUR003M Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Thirty360()) { }
@@ -150,7 +148,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myEuribor6M : myDepositRateEUR
+    public class myEuribor6M : myDepositRateEUR
     {
         public myEuribor6M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(6, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUR006M Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Thirty360()) { }
@@ -160,7 +158,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myEuribor9M : myDepositRateEUR
+    public class myEuribor9M : myDepositRateEUR
     {
         public myEuribor9M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(9, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUR009M Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Thirty360()) { }
@@ -170,7 +168,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myEuribor12M : myDepositRateEUR
+    public class myEuribor12M : myDepositRateEUR
     {
         public myEuribor12M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(12, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUR012M Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Thirty360()) { }

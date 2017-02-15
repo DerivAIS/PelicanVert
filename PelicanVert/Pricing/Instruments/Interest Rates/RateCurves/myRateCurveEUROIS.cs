@@ -10,7 +10,7 @@ using QLNet;
 
 namespace QLyx.InterestRates
 {
-    class myRateCurveEUROIS : myRateCurve
+    public class myRateCurveEUROIS : myRateCurve
     {
 
         // ************************************************************

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 using QLyx.DataIO.Connector;
 using QLyx.DataIO.Fetcher;
-
 using QLyx.Containers;
 
 
@@ -115,7 +114,7 @@ namespace QLyx.DataIO
                 }
 
                 // CASE B-3 : Start Date not covered but end date present
-                else if (!startDatePresent && endDatePresent) 
+                else if (!startDatePresent && endDatePresent) // ----------------> Verified
                 {
                     // Update local database
                     myFrame startData = UpdateData(myRequest, myRequest.startDate, localData.startDate.AddDays(-1)); 
@@ -131,7 +130,8 @@ namespace QLyx.DataIO
                 // CASE B-4 : Both ends not covered
                 else 
                 {
-                    myFrame startData = UpdateData(myRequest, localData.startDate, myRequest.startDate.AddDays(-1)); 
+                    //myFrame startData = UpdateData(myRequest, localData.startDate, myRequest.startDate.AddDays(-1));
+                    myFrame startData = UpdateData(myRequest, myRequest.startDate, localData.startDate.AddDays(-1));
                     localData.Union(startData);
 
                     myFrame endData = UpdateData(myRequest, myRequest.endDate.AddDays(1), localData.endDate);

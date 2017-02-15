@@ -119,7 +119,7 @@
     <Compile Include="Pricing\Credit\Probability Traits.cs" />
     <Compile Include="Pricing\GenericInstruments\GenericAutocall.cs" />
     <Compile Include="Pricing\GenericInstruments\GenericlIntrument.cs" />
-    <Compile Include="Pricing\GenericInstruments\MCGenericInstrument.cs" />
+    <Compile Include="Pricing\Instruments\MCGenericInstrument.cs" />
     <Compile Include="Pricing\Instruments\Credit\myCDS.cs" />
     <Compile Include="Pricing\Instruments\Credit\myCDSCurve.cs" />
     <Compile Include="Pricing\Instruments\Derivatives\old_Autocall\EngineFactory.cs" />
@@ -179,7 +179,6 @@
     <Compile Include="Simulation\Strategy\IStrategy.cs" />
     <Compile Include="Simulation\Strategy\MarkitStrategy.cs" />
     <Compile Include="Simulation\Utilities\Utilities.cs" />
-    <Compile Include="Test\testclasse.cs" />
     <Compile Include="TimeSeries\myElement.cs" />
     <Compile Include="TimeSeries\myFrame OLD.cs" />
     <Compile Include="TimeSeries\myFrame.cs" />

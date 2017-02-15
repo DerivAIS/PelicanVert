@@ -15,7 +15,7 @@ namespace QLyx.InterestRates
 {
 
 
-    class myDepositRateEUROIS : myDepositRate
+    public class myDepositRateEUROIS : myDepositRate
     {
 
         // ************************************************************
@@ -81,7 +81,7 @@ namespace QLyx.InterestRates
 
     #region
 
-    class myEONIAOIS : myDepositRateEUROIS
+    public class myEONIAOIS : myDepositRateEUROIS
     {
         public myEONIAOIS()
             : base(PricingDate_: DateTime.Today, Period_: new Period(1, TimeUnit.Days), argDBID_: TokenFactory.New(Bloomberg: "EONIA Index"), FixingDays_: 0, BDC_: BusinessDayConvention.Following, DayCounter_: new Actual360()) { }
@@ -91,7 +91,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap1W : myDepositRateEUROIS
+    public class myOISswap1W : myDepositRateEUROIS
     {
         public myOISswap1W()
             : base(PricingDate_: DateTime.Today, Period_: new Period(1, TimeUnit.Weeks), argDBID_: TokenFactory.New(Bloomberg: "EUSEW1Z Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -101,7 +101,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap2W : myDepositRateEUROIS
+    public class myOISswap2W : myDepositRateEUROIS
     {
         public myOISswap2W()
             : base(PricingDate_: DateTime.Today, Period_: new Period(2, TimeUnit.Weeks), argDBID_: TokenFactory.New(Bloomberg: "EUSEW2Z Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -111,7 +111,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap1M : myDepositRateEUROIS
+    public class myOISswap1M : myDepositRateEUROIS
     {
         public myOISswap1M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(1, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUSWEA Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -121,7 +121,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap2M : myDepositRateEUROIS
+    public class myOISswap2M : myDepositRateEUROIS
     {
         public myOISswap2M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(2, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUSWEB Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -131,7 +131,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap3M : myDepositRateEUROIS
+    public class myOISswap3M : myDepositRateEUROIS
     {
         public myOISswap3M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(3, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUSWEC Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -141,7 +141,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap4M : myDepositRateEUROIS
+    public class myOISswap4M : myDepositRateEUROIS
     {
         public myOISswap4M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(4, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUSWED Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -151,7 +151,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap5M : myDepositRateEUROIS
+    public class myOISswap5M : myDepositRateEUROIS
     {
         public myOISswap5M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(5, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUSWEE Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -161,7 +161,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap6M : myDepositRateEUROIS
+    public class myOISswap6M : myDepositRateEUROIS
     {
         public myOISswap6M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(6, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUSWEF Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -171,7 +171,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap7M : myDepositRateEUROIS
+    public class myOISswap7M : myDepositRateEUROIS
     {
         public myOISswap7M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(7, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUSWEG Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -181,7 +181,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap8M : myDepositRateEUROIS
+    public class myOISswap8M : myDepositRateEUROIS
     {
         public myOISswap8M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(8, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUSWEH Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -191,7 +191,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap9M : myDepositRateEUROIS
+    public class myOISswap9M : myDepositRateEUROIS
     {
         public myOISswap9M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(9, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUSWEI Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -201,7 +201,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap10M : myDepositRateEUROIS
+    public class myOISswap10M : myDepositRateEUROIS
     {
         public myOISswap10M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(10, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUSWEJ Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }
@@ -211,7 +211,7 @@ namespace QLyx.InterestRates
     }
 
 
-    class myOISswap11M : myDepositRateEUROIS
+    public class myOISswap11M : myDepositRateEUROIS
     {
         public myOISswap11M()
             : base(PricingDate_: DateTime.Today, Period_: new Period(11, TimeUnit.Months), argDBID_: TokenFactory.New(Bloomberg: "EUSWEK Index"), FixingDays_: 2, BDC_: BusinessDayConvention.ModifiedFollowing, DayCounter_: new Actual360()) { }

@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PelicanVert.Test
+namespace Dev_Pascal.Pricing.Underlyings
 {
-    class testclasse
+    class IND1EDFI
     {
 
-        //test classe : delete me
-        //second test
-        // third test
+
     }
 }

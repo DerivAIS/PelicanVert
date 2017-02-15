@@ -419,9 +419,17 @@ namespace QLyx.DataIO.Markit
         }
 
         // ACCESSING STRIKES
+        public List<double> Strikes(double refSpot)
+        {
+            var smile = _data.FirstOrDefault().Value.Strikes();
+            List<double> result = new List<double>();
+            foreach (double pt in smile) { result.Add(pt * refSpot); }
+            return result;
+        }
+
         public List<double> Strikes()
         {
-            return _data.FirstOrDefault().Value.Strikes();
+            return Strikes(1.0);
         }
 
         // ACCESSING DATES
@@ -433,6 +441,7 @@ namespace QLyx.DataIO.Markit
         }
 
         // ACCESSING VOL MATRIX
+        
         public Matrix VolMatrix()
         {
             int rows =  Strikes().Count();

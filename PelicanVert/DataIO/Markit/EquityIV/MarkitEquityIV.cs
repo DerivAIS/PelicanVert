@@ -295,6 +295,9 @@ namespace QLyx.DataIO.Markit
         /// </summary>
         private MarkitSurface Get_newFileFormat(DateTime valuationDate)
         {
+            if (data.ContainsKey(valuationDate))
+            { return data[valuationDate]; }
+
             // Load data using reader
             MarkitVolatilityReader myReader = new MarkitVolatilityReader(_underlying);
             data = myReader.Get(indexName, valuationDate, true);
