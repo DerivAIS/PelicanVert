@@ -7,12 +7,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
-//using System.Linq.Expressions;
 
 namespace QLNet
 {
 
-    public class GenericInstrument : Instrument
+    public abstract class GenericInstrument : Instrument
     {
         #region Attributs
         protected Dictionary<string, List<double>> indexDico_;
@@ -21,7 +20,7 @@ namespace QLNet
         protected Date maturity_;
         protected Func<Dictionary<string,List<double>>, Dictionary<string,List<double>>, Handle<YieldTermStructure>, Path, double> scriptDico_;
         
-        protected Dictionary<string, double> inspout_;
+        protected SortedDictionary<string, double> inspout_;
         protected double samples_;
 
         public Arguments arguments;
@@ -49,14 +48,10 @@ namespace QLNet
         }
 
 
-        public virtual double ScriptDico(Dictionary<string,List<double>> timeDico,
-                             Dictionary<string,List<double>> indexDico,
+        public abstract double ScriptDico(Dictionary<string, List<double>> timeDico,
+                             Dictionary<string, List<double>> indexDico,
                              Handle<YieldTermStructure> discountTS,
-                             Path path)
-        {
-            return 0.0;
-        }
-
+                             Path path);
 
 
         public override void setupArguments(IPricingEngineArguments args)
@@ -68,7 +63,6 @@ namespace QLNet
             arguments.datesDico = datesDico_;
             arguments.indexDico = indexDico_;
             arguments.maturity = maturity_;
-           // arguments.inspout = inspout_;
         }
 
 
@@ -100,8 +94,6 @@ namespace QLNet
 
             if (inspout_.ContainsKey(varName))
             {
-                //tempList = (List<double>)inspout_[varName];
-                //tempList.Add(varValue);
                 inspout_[varName] = (double)inspout_[varName] + varValue;
             }
             else
@@ -109,14 +101,42 @@ namespace QLNet
                 inspout_.Add(varName, varValue);
                 
             }
-            //inspout_ = additionalResults_;*/
         }
 
+        public void inspout(int decimals = 10, bool percent = false)
+        {
+            List<string> keyList = new List<string>(inspout_.Keys);
+            int width = 5;
+            double val = 0.0;
+            string format = "0.";
 
+            for (int i = 0; i < decimals; i++)
+                format= string.Concat(format, "0");
+
+            if (percent)
+                format = string.Concat(format, "%");
+
+            foreach (string key in keyList)
+            {
+                width = Math.Max(width, key.Length);
+            }
+
+            foreach (string key in keyList)
+            {
+                Console.Write("{0,-" + width + "}", key);
+                Console.Write(" = ");
+                val = inspout_[key] / samples_;
+                val.ToString(format);
+                Console.WriteLine(val.ToString(format));
+            }
+
+           
+        }
 
         public double inspout(string varName)
         {
-            if(!inspout_.ContainsKey(varName)) throw new Exception("this value is not defined : " + varName);
+            if (!inspout_.ContainsKey(varName)) // throw new Exception("this value is not defined : " + varName);
+                return 0.0;
             return inspout_[varName] / samples_;
         }
 
@@ -166,7 +186,7 @@ namespace QLNet
              datesDico_ = datesDico;
              indexDico_ = indexDico;
              scriptDico_ = (Func<Dictionary<string,List<double>>, Dictionary<string,List<double>>, Handle<YieldTermStructure>, Path, double>)ScriptDico;
-             inspout_ = new Dictionary<string, double>();
+             inspout_ = new SortedDictionary<string, double>();
              
              /// get maturity date
 
