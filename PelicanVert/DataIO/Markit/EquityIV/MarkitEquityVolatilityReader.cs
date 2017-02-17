@@ -131,7 +131,7 @@ namespace QLyx.DataIO.Markit
 
 
         int retryCount = 0;
-        int maxRetry= 5;
+        int maxRetry= 100000;
 
         bool isNewFileFormat = false;
 

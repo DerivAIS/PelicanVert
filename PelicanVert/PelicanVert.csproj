@@ -69,6 +69,8 @@
     <Compile Include="DataIO\Database\Data Containers\Base\GenericDatabaseTable.cs" />
     <Compile Include="DataIO\Database\Data Containers\Base\IGenericDatabaseLine.cs" />
     <Compile Include="DataIO\Database\Data Containers\Base\IGenericDatabaseTable.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Bond\Bond Line.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Bond\Bond Table.cs" />
     <Compile Include="DataIO\Database\Data Containers\Equity Volatility\Equity Volatility Line.cs" />
     <Compile Include="DataIO\Database\Data Containers\Equity Volatility\Equity Volatility Table.cs" />
     <Compile Include="DataIO\Database\Data Containers\Equity\Equity Line.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="Pricing\Instruments\Interest Rates\SwapRates\mySwapRateEURv6m.cs" />
     <Compile Include="Pricing\Instruments\Interest Rates\SwapRates\mySwapRateUSDv3m.cs" />
     <Compile Include="Pricing\Instruments\Utilities\SimulationInstrument.cs" />
+    <Compile Include="Pricing\TermStructures\FixedForward.cs" />
     <Compile Include="Pricing\Volatility\LocalVolSurfaceTolerance.cs" />
     <Compile Include="Pricing\Volatility\GeneralizedBS_Tolerance.cs" />
     <Compile Include="Program.cs" />

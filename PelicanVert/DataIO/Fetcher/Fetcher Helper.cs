@@ -28,7 +28,29 @@ namespace QLyx.DataIO.Fetcher
                     { "Close", "PX_LAST"  },
                     { "Volume", "VOLUME"  },
                     { "AdjustedClose", ""  },
-                    { "Last", "PX_LAST"  }
+                    { "Last", "PX_LAST"  },
+
+                    {"CleanPriceBid", "PX_BID" },
+                    {"CleanPriceAsk", "PX_ASK" },
+                    {"CleanPriceMid", "PX_MID" },
+
+                    {"DirtyPriceBid", "PX_DIRTY_BID" },
+                    {"DirtyPriceAsk", "PX_DIRTY_ASK" },
+                    {"DirtyPriceMid", "PX_DIRTY_MID" },
+
+                    {"YieldToMaturityBid", "YLD_YTM_BID" },
+                    {"YieldToMaturityAsk", "YLD_YTM_ASK" },
+                    {"YieldToMaturityMid", "YLD_YTM_MID" },
+
+                    //{"CDS1Y", "1Y_MID_CDS_SPREAD" },
+                    //{"CDS3Y", "3Y_MID_CDS_SPREAD" },
+                    //{"CDS5Y", "5Y_MID_CDS_SPREAD" },
+                    //{"CDS7Y", "7Y_MID_CDS_SPREAD" },
+                    //{"CDS10Y", "10Y_MID_CDS_SPREAD" },
+
+                    {"AssetSwapSpreadBid", "ASSET_SWAP_SPD_BID" },
+                    {"AssetSwapSpreadAsk", "ASSET_SWAP_SPD_ASK" },
+                    {"AssetSwapSpreadMid", "ASSET_SWAP_SPD_MID" }
 
                 };
 
@@ -236,9 +258,23 @@ namespace QLyx.DataIO.Fetcher
                 List<EquityVolatility_Line> myRes = Fetch_Bloomberg<EquityVolatility_Line>(myRequest.id.DBID, myRequest.id.Bloomberg, Mapping, myRequest.startDate, myRequest.endDate, scalingFactors);
                 return new myFrame(myRes);
             }
-          
 
-            // CASE D : DEFAULT (EXCEPTION THROWN)
+
+
+            // CASE D : BOND
+            else if (ContainerType == typeof(Bond_Line))
+            {
+                var type = typeof(Bond_Line);
+                var Tobj = (Bond_Line)Activator.CreateInstance(type);
+
+                Dictionary<String, String> Mapping = MapExternalFieldsToLocal("Bloomberg", Tobj.GetDataFields());
+                Dictionary<String, Double> scalingFactors = MapScalingFactors("Bloomberg", Tobj.GetDataFields(), ContainerType);
+
+                List<Bond_Line> myRes = Fetch_Bloomberg<Bond_Line>(myRequest.id.DBID, myRequest.id.Bloomberg, Mapping, myRequest.startDate, myRequest.endDate, scalingFactors);
+                return new myFrame(myRes);
+            }
+
+            // CASE LAST : DEFAULT (EXCEPTION THROWN)
             else 
             { 
                 throw new System.ArgumentException("FetcherException", "Bloomberg Fetcher delegation failed, unable to identify the return type."); 
@@ -439,7 +475,12 @@ namespace QLyx.DataIO.Fetcher
                 return FillScalingDict(1.0, argFields);
             }
 
-            
+            // CASE D : Bond
+            if (ContainerType == typeof(Bond_Line))
+            {
+                return FillScalingDict_BondLine(argFields);
+            }
+
             else { throw new System.ArgumentException("FetcherHelperMappingException", "Fetcher mapper unable to map scaling factors."); }
 
          }
@@ -462,6 +503,32 @@ namespace QLyx.DataIO.Fetcher
 
 
 
+        private Dictionary<string, double> FillScalingDict_BondLine(List<string> argFields)
+        {
+            //Dictionary<String, Double> output = new Dictionary<string, double>();
+            Dictionary<string, double> output = new Dictionary<string, double>()
+                {
+                    {"CleanPriceBid", 0.01},
+                    {"CleanPriceAsk", 0.01},
+                    {"CleanPriceMid", 0.01},
+
+                    {"DirtyPriceBid", 0.01},
+                    {"DirtyPriceAsk", 0.01},
+                    {"DirtyPriceMid", 0.01},
+
+                    {"YieldToMaturityBid", 0.01},
+                    {"YieldToMaturityAsk", 0.01},
+                    {"YieldToMaturityMid", 0.01},
+
+                    //{"AssetSwapSpreadBid", 1.0},
+                    {"AssetSwapSpreadMid", 1.0},
+                    //{"AssetSwapSpreadAsk", 1.0}
+
+            };
+            
+
+            return output;
+        }
 
         #endregion
 

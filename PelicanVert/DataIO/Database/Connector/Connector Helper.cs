@@ -70,6 +70,9 @@ namespace QLyx.DataIO.Connector
                 case "Equity":
                     return GetData_myDB_Equity(myRequest, ContainerType);
 
+                case "Bond":
+                    return GetData_myDB_Bond(myRequest, ContainerType);
+
                 case "EquityVolatility":
                     return GetData_myDB_EquityVolatility(myRequest, ContainerType);
 
@@ -94,6 +97,22 @@ namespace QLyx.DataIO.Connector
         {
             myDB_Connector myConnect = new myDB_Connector();
             List<Equity_Line> myRes = myConnect.Select<Equity_Line>(myRequest.id.DBID, myRequest.fields, myRequest.startDate, myRequest.endDate);
+            return new myFrame(myRes);
+        }
+
+        private myFrame GetData_myDB_Bond(HistoricalDataRequest myRequest, Type ContainerType)
+        {
+            myDB_Connector myConnect = new myDB_Connector();
+            List<Bond_Line> myRes = myConnect.Select<Bond_Line>(myRequest.id.DBID, myRequest.fields, myRequest.startDate, myRequest.endDate);
+
+            int MaxRetry = 10;
+            int retry = 0;
+
+            foreach (Bond_Line line in myRes) {
+                if (line.isNull()) { retry += 1; }
+                if (retry >= MaxRetry) { return new myFrame(); }
+            }
+
             return new myFrame(myRes);
         }
 
@@ -153,13 +172,16 @@ namespace QLyx.DataIO.Connector
                     SetData_myDB_EquityVolatility(idTok, Data);
                     break;
 
+
+                case "Bond":
+                    SetData_myDB_Bond(idTok, Data);
+                    break;
+
                 default:
                     { throw new System.ArgumentException("CH_MappingException", "Connector Helper unable to map the database."); }
 
             }
-
         }
-
 
         private void SetData_myDB_InterestRate(IDtoken idTok, myFrame data)
         {
@@ -168,6 +190,16 @@ namespace QLyx.DataIO.Connector
 
             myConnect.Insert<InterestRate_Line>(idTok, dataToInsert);
             
+
+        }
+
+        private void SetData_myDB_Bond(IDtoken idTok, myFrame data)
+        {
+            myDB_Connector myConnect = new myDB_Connector();
+            List<Bond_Line> dataToInsert = data.ToList<Bond_Line>(idTok.DBID);
+
+            myConnect.Insert<Bond_Line>(idTok, dataToInsert);
+
 
         }
 

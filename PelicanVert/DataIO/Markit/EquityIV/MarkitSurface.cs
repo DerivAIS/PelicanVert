@@ -432,6 +432,11 @@ namespace QLyx.DataIO.Markit
             return Strikes(1.0);
         }
 
+        protected int ATM_index()
+        {
+            return Strikes().IndexOf(1.0);
+        }
+
         // ACCESSING DATES
         public List<Date> Dates()
         {
@@ -469,6 +474,67 @@ namespace QLyx.DataIO.Markit
             return res;
         }
 
+        public Matrix VolMatrix(double scalingLevel)
+        {
+            int rows = Strikes().Count();
+            int cols = _data.Count();
+
+            int r = 0;
+            int c = 0;
+
+            Matrix res = new Matrix(rows, cols, 0.0);
+
+            foreach (DateTime dt in _data.Keys)
+            {
+
+                MarkitSmile smile = _data[dt];
+
+                foreach (double strike in smile.Strikes())
+                {
+                    res[c, r] = smile[strike] * scalingLevel;
+                    c++;
+                }
+                c = 0;
+                r++;
+            }
+
+            return res;
+        }
+
+
+
+        public Matrix VolMatrix(double scalingLevel, double smileLevel)
+        {
+            int rows = Strikes().Count();
+            int cols = _data.Count();
+
+            int r = 0; // tenor - maturity
+            int c = 0; // strike - moneyness
+
+            Matrix tmp = new Matrix(rows, cols, 0.0);
+            //Matrix res = new Matrix(rows, cols, 0.0);
+            
+            foreach (DateTime dt in _data.Keys)
+            {
+                MarkitSmile smile = _data[dt];
+                double smileATM = smile.data[1.0];
+
+                foreach (double strike in smile.Strikes())
+                {
+                    double atm_vol = smile[strike] * scalingLevel;
+                    double smile_excess = (smile[strike] - smileATM);
+
+                    tmp[c, r] = scalingLevel * ( smile[strike] + smileLevel * (smile[strike] - smileATM) );
+                    c++;
+                }
+                c = 0;
+                r++;
+            }
+
+            
+            return tmp;
+
+        }
 
         private MarkitSmile Extrapolate_ShortEnd(DateTime expiryDate)
         {

@@ -21,6 +21,7 @@ namespace QLyx.DataIO
 
         // Interest Rates
         InterestRate,
+        Bond,
 
 
         // Reference

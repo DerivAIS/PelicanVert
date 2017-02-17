@@ -7,11 +7,16 @@ using System.Threading.Tasks;
 // External custom
 using QLNet;
 
-// Internal Custom
+// Internal Custom QLYX
 using QLyx.DataIO.Markit;
-using Pascal.Valuation;
 using QLyx.InterestRates;
 using QLyx.Utilities;
+
+// Internal Custom DEV
+using Pascal.Valuation;
+using Pascal.Pricing;
+using Pascal.Pricing.Bonds;
+using Pascal.Pricing.Underlyings;
 
 namespace Dev_Pascal
 {
@@ -55,20 +60,35 @@ namespace Dev_Pascal
                 dates.Add((pricingDate.ToDate() + freq*i).ToDateTime());
             }
 
-            DateTime strikeDate = (pricingDate.ToDate() - freq).ToDateTime();
+            DateTime strikeDate = new DateTime(2014, 06, 18);
 
-            // COUPONS DU BOND
-            /*
-            EUR_Coupon_Stream cpn = new EUR_Coupon_Stream(1.0, dates);
-            cpn.PV_v3m(pricingDate);
-            double px = cpn.PV_v3m(pricingDate);
-            */
             
-            BermudeanCliquetBinaryOption_v2 opt = new BermudeanCliquetBinaryOption_v2(strikeDate, dates, MarkitEquityUnderlying.Eurostoxx_TR, 
-                0.077, 0.70, 1.21, 0.70, new TARGET(), new Actual365Fixed(), BusinessDayConvention.Preceding);
+            //FixedDivIndex FSEURE = new FixedDivIndex(PricingUnderlying.IND1EDFI, MarkitEquityUnderlying.Eurostoxx, 0, 0, 0.5, 1.00);
+            //var sdsd = FSEURE.impliedVolatilitySurface(pricingDate);
+
+
+            double couponLevel = 0.077;
+            double barrierLevel = 0.70;
+            double cliquetLevel = 1.21;
+
+            BermudeanCliquetBinaryOption<IND1EDFI> opt = new BermudeanCliquetBinaryOption<IND1EDFI>(strikeDate, dates, couponLevel, barrierLevel, cliquetLevel, new TARGET(), 
+                new Actual365Fixed(), BusinessDayConvention.Preceding);
 
             double px = opt.NPV(pricingDate);
-            //double probaDown = opt.binaire().inspout("AvgMid");
+            // double probaDown = opt.binaire().inspout("AvgMid");
+
+
+
+            throw new NotImplementedException();
+
+            BondPricingInstrument btp = new BondPricingInstrument(BondReferential.BTP_525_01Nov2029, new DateTime(2029, 11, 01), 
+                100.0, 5.25, new Period(6, TimeUnit.Months), "EUR", new Italy(), new Actual365Fixed(), BusinessDayConvention.ModifiedPreceding);
+
+            double pxBondClean = btp.cleanPrice(pricingDate);
+            double pxBondDirty = btp.dirtyPrice(pricingDate);
+            double assetSwapSpread = btp.assetSwapSpread(pricingDate);
+
+            btp.couponsPV_vs3m(pricingDate);
 
             Console.ReadKey();
 

@@ -14,6 +14,13 @@ namespace QLyx.DataIO.Markit
 
 
         // ************************************************************
+        // STATIC METHODS
+        // ************************************************************
+
+
+
+
+        // ************************************************************
         // PRIVATE CONSTRUCTORS & NESTED CLASS
         // ************************************************************
 
@@ -22,6 +29,7 @@ namespace QLyx.DataIO.Markit
         private MarkitEquityUnderlying _underlying;
 
         private DateTime formatChangeDate = new DateTime(2016, 10, 25);
+
         private bool _isNewFileFormat = false;
 
         private Markit_Equity_IV(MarkitEquityUnderlying underlying)
@@ -65,7 +73,6 @@ namespace QLyx.DataIO.Markit
         /// Method used ton instanciate the Markit Equity IV in-memory cache (singleton).
         /// </summary>
         public static Markit_Equity_IV Instance(MarkitEquityUnderlying underlying) { return Nested.instance(underlying); }
-
 
         #endregion
 

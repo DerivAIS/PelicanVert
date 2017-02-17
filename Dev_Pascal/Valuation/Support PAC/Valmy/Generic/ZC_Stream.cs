@@ -51,7 +51,7 @@ namespace Pascal.Valuation
 
         public EUR_Coupon_Stream(List<double> couponList, List<DateTime> dateList)
         {
-            if (couponList.Count() != dateList.Count()) { throw new ArgumentException("CouponDateMismatch","Wrong number of coupons or dates provided."); }
+            if (couponList.Count() != dateList.Count()) { throw new ArgumentException("CouponDateMismatch", "Wrong number of coupons or dates provided."); }
 
             int k = 0;
 

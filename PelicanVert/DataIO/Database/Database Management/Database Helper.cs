@@ -142,8 +142,7 @@ namespace QLyx.DataIO
 
 
             }
-
-
+            
         }
 
 
@@ -234,6 +233,9 @@ namespace QLyx.DataIO
                 case "EquityVolatility":
                     return "EquityVolatility";
 
+                case "Bond":
+                    return "Bond";
+
                 default:
                     { throw new System.ArgumentException("DBH_MappingException", "Database Helper unable to map schema table from the asset class."); }
 
@@ -276,6 +278,9 @@ namespace QLyx.DataIO
 
                 case "Equity":
                     return typeof(Equity_Line);
+
+                case "Bond":
+                    return typeof(Bond_Line);
 
                 case "EquityVolatility":
                     return typeof(EquityVolatility_Line);

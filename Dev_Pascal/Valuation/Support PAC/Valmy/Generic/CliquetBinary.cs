@@ -16,62 +16,13 @@ using QLyx.Containers;
 using Pascal.Pricing.Engines;
 using Pascal.Pricing.Exercises;
 using Pascal.Pricing.Instruments;
+using Pascal.Pricing.Underlyings;
 
 namespace Pascal.Valuation
 {
-    public class BermudeanCliquetBinaryOption
+    public class BermudeanCliquetBinaryOption<T> where T : UnderlyingIndex
     {
-
-
-        // ************************************************************
-        // PROPERTIES - INFRASTUCTURE
-        // ************************************************************
-
-        #region Infrastructure
-
-        // Le référentiel de la database
-        private ReferenceManager _referentiel = ReferenceManager.Factory;
-        private ReferenceManager referentiel()
-        {
-            if (_referentiel == null) { _referentiel = ReferenceManager.Factory; }
-            return _referentiel;
-        }
         
-        // Accès au référentiel de la database
-        private IDtoken GetToken(int referenceDBID)
-        {
-            return _referentiel.Identify(new DBID(referenceDBID));
-        }
-        
-        // Accès aux données de la base via le helper
-        protected myFrame EndOfDay(int referenceDBID, DateTime startDate = new DateTime(), DateTime endDate = new DateTime())
-        {
-            IDtoken thisToken = GetToken(referenceDBID);
-            return EndOfDay(thisToken, startDate, endDate);
-        }
-
-        protected myFrame EndOfDay(IDtoken referenceToken, DateTime startDate = new DateTime(), DateTime endDate = new DateTime())
-        {
-            if (startDate == DateTime.MinValue) { startDate = _strikeDate.AddDays(-31); }
-            if (endDate == DateTime.MinValue) { endDate = _valuationDate; }
-
-            HistoricalDataRequest myRequest = new HistoricalDataRequest(referenceToken, startDate, endDate);
-            return _localDatabase.GetEODPrices(myRequest);
-        }
-        
-        // Helper pour la DB locale
-        DatabaseHelper _localDatabase = new DatabaseHelper();
-        
-        // Market Data (Markit)
-        protected Markit_Equity_IV _marketData;
-        protected MarkitSurface marketData(DateTime valuationDate)
-        {
-            if (_marketData == null) { _marketData = Markit_Equity_IV.Instance(_underlying); }
-            return _marketData[valuationDate];
-        }
-
-        #endregion
-
 
         // ************************************************************
         // PROPERTIES - UNDERLYING
@@ -79,37 +30,40 @@ namespace Pascal.Valuation
 
         #region Underlying
 
+        // Underlying id
+        protected MarkitEquityUnderlying _underlyingMarkitID;
+
         // Underlying
-        protected MarkitEquityUnderlying _underlying;
+        protected T _underlying;
 
-        // Underlying value on strike date (the strike level)
-        protected double _spotAtStrike = Double.NaN;
-        public double strikeLevel() {
-            if (_spotAtStrike == Double.NaN) { _spotAtStrike = underlying(_strikeDate); }
-            return _spotAtStrike;
+        protected T underlying() {
+            // if (_underlying == null) { SetUnderlyingIndex(); }
+            if (_underlying == null) {
+                var type = typeof(T);
+                _underlying = (T)Activator.CreateInstance(type);
+            }
+            return _underlying;
         }
-
-        // Identification
-        protected DBID underlyingID() { return new DBID((int)_underlying); }
-
-        // Accessing the Time series
-        protected myFrame _underlying_timeSeries;
-        protected double underlying(DateTime date)
+ 
+        /*
+        protected void SetUnderlyingIndex()
         {
-            if (_underlying_timeSeries == null) { SetUnderlyingTimeSeries(); }
-            return (double)_underlying_timeSeries[date]["Close"];
+            _underlying = new UnderlyingIndex(_underlyingMarkitID, _dayCounter, _bdc);
         }
+        */
 
-        // Setting the Time series
-        protected void SetUnderlyingTimeSeries()
+        // Forward request to underlying index object
+        public double strikeLevel()
         {
-            _underlying_timeSeries = EndOfDay(underlyingID());
+            return underlying().spot(_strikeDate);
         }
 
-        public double currentSpot() {
-            return underlying(_valuationDate);
+        // Forward request to underlying index object
+        public double spot(DateTime valuationDate)
+        {
+            return underlying().spot(valuationDate);
         }
-        
+
         #endregion
 
 
@@ -146,69 +100,18 @@ namespace Pascal.Valuation
         // ************************************************************
         // PROPERTIES - OPTIONS DEFINITION
         // ************************************************************
-
-        #region Options definition *** PASCAL ***
-       
-         // Exercise
-          protected PathDepExercise _exercise;
-        public PathDepExercise exercise() {
-            if (_exercise == null) { SetExercise(); }
-            return _exercise;
-        }
-
-        protected void SetExercise()
-        {
-            // _exercise = new PathDepExercise(Exercise.Type.Bermudan, true);
-            List<Date> _dates = new List<Date>();
-            foreach (var dt in _observationDates)
-            {
-                _dates.Add(dt.ToDate());
-            }
-            _exercise = new PathDepExercise(_dates);
-        }
-
-        // Payoff
-        protected CliquetBinarySequence_Payoff _payoff;
-        public CliquetBinarySequence_Payoff payoff()
-        {
-            if (_payoff == null) { SetPayoff(); }
-            return _payoff;
-        }
-
-        protected void SetPayoff()
-        {
-            _payoff = new CliquetBinarySequence_Payoff(1.0, strikeLevel(), _couponSchedule.Values.ToList(), 
-                                                        _strikeMoneyness.Values.ToList(), _cliquetMoneyness.Values.ToList());
-        }
-
-        // Instrument
-        protected CliquetBinarySequence_Instrument _instrument;
-        public CliquetBinarySequence_Instrument instrument()
-        {
-            if (_instrument == null) { SetInstrument(); }
-            return _instrument;
-        }
-        protected void SetInstrument()
-        {
-            var exer = exercise();
-            var poff = payoff();
-            _instrument = new CliquetBinarySequence_Instrument(_valuationDate, exer, poff);
-        }
-
-        #endregion
-
-
-        #region *** MARC ***
+        
+        #region Option definition
 
         protected ScriptedBinaire _binaire;
-        public ScriptedBinaire binaire() {
+        public ScriptedBinaire binaire()
+        {
             if (_binaire == null) { SetScriptedBinaire(); }
             return _binaire;
         }
 
         protected void SetScriptedBinaire()
         {
-
             // Dates
             List<Date> _dates = new List<Date>();
             foreach (var dt in _observationDates)
@@ -216,15 +119,22 @@ namespace Pascal.Valuation
                 _dates.Add(dt.ToDate());
             }
 
-            _binaire = new ScriptedBinaire(_dates, _couponRate, _singleStrikeMoneyness, _singleCliquetMoneyness, _singleStrikeMoneyness, 154.0, currentSpot());
+            // strike level NOT OK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            double thisStrike = underlying().spot(_strikeDate); // -------------> le spot n'est pas le bon... ça ne retourne pas le niveau
+
+            // Instanciate
+            _binaire = new ScriptedBinaire(_dates, _couponRate, _singleStrikeMoneyness,
+                _singleCliquetMoneyness, thisStrike, _underlying.fixDiv(), _underlying.drift());
 
         }
-            
 
-
+        protected GeneralizedBlackScholesProcess process(DateTime valuationDate) {
+            return underlying().stochasticProcess(valuationDate);
+        }
 
 
         #endregion
+
 
         // ************************************************************
         // PROPERTIES - COUPONS
@@ -237,8 +147,10 @@ namespace Pascal.Valuation
 
         // Coupons
         protected Dictionary<DateTime, double> _couponSchedule = new Dictionary<DateTime, double>();
-        public Dictionary<DateTime, double> coupons() {
-            if (_couponSchedule.Count() == 0 || _couponSchedule == null) {
+        public Dictionary<DateTime, double> coupons()
+        {
+            if (_couponSchedule.Count() == 0 || _couponSchedule == null)
+            {
                 Console.WriteLine("Binary Cliquet Option : Coupon schedule not set. Using the default coupon rate.");
                 SetCouponsLevels(_couponRate);
             }
@@ -246,8 +158,10 @@ namespace Pascal.Valuation
         }
 
         // Set a unique coupon level for all observation dates (scalar)
-        protected void SetCouponsLevels(double couponRate) {
-            foreach (Date dt in _exercise.dates()) {
+        protected void SetCouponsLevels(double couponRate)
+        {
+            foreach (Date dt in _observationDates)
+            {
                 _couponSchedule[dt.ToDateTime()] = couponRate;
             }
         }
@@ -256,7 +170,7 @@ namespace Pascal.Valuation
         protected void SetCouponsLevels(List<double> coupons)
         {
             int k = 0;
-            foreach (Date dt in _exercise.dates())
+            foreach (Date dt in _observationDates)
             {
                 _couponSchedule[dt.ToDateTime()] = coupons.IndexOf(k);
                 k++;
@@ -290,7 +204,7 @@ namespace Pascal.Valuation
         // Set a unique coupon level for all observation dates (scalar)
         protected void SetStrikeLevels(double strikeMoneyness)
         {
-            foreach (Date dt in _exercise.dates())
+            foreach (Date dt in _observationDates)
             {
                 _strikeMoneyness[dt.ToDateTime()] = strikeMoneyness;
             }
@@ -300,7 +214,7 @@ namespace Pascal.Valuation
         protected void SetStrikeLevels(List<double> strikeMoneyness)
         {
             int k = 0;
-            foreach (Date dt in _exercise.dates())
+            foreach (Date dt in _observationDates)
             {
                 _strikeMoneyness[dt.ToDateTime()] = strikeMoneyness.IndexOf(k);
                 k++;
@@ -334,7 +248,7 @@ namespace Pascal.Valuation
         // Set a unique coupon level for all observation dates (scalar)
         protected void SetCliquetLevels(double cliquetMoneyness)
         {
-            foreach (Date dt in _exercise.dates())
+            foreach (Date dt in _observationDates)
             {
                 _cliquetMoneyness[dt.ToDateTime()] = cliquetMoneyness;
             }
@@ -344,7 +258,7 @@ namespace Pascal.Valuation
         protected void SetCliquetLevels(List<double> cliquetMoneyness)
         {
             int k = 0;
-            foreach (Date dt in _exercise.dates())
+            foreach (Date dt in _observationDates)
             {
                 _cliquetMoneyness[dt.ToDateTime()] = cliquetMoneyness.IndexOf(k);
                 k++;
@@ -355,61 +269,14 @@ namespace Pascal.Valuation
 
 
         // ************************************************************
-        // PROPERTIES - STOCHASTIC PROCESS
-        // ************************************************************
-
-        #region Stochastic Process
-
-        // Process
-        protected GeneralizedBlackScholesProcessTol _process;
-        public GeneralizedBlackScholesProcessTol process() {
-            if (_process == null) { SetStochasticProcess(_valuationDate); }
-            return _process;
-        }
-
-        // Set the stochastic process
-        protected void SetStochasticProcess(DateTime valuationDate)
-        {
-            
-            // Sous-jacent : Spot de Bloomberg
-            Handle<Quote> underlyingH = new Handle<Quote>(new SimpleQuote(currentSpot()));
-
-            // Yield Term Structure
-            Handle<YieldTermStructure> RateTermStructure = marketData(_valuationDate).riskFree_FwdCrv();
-      
-            // Dividend Yield
-            var DivTermStructure = marketData(_valuationDate).dividend_FwdCrv();
-            
-            // Volatility Surface
-            Matrix volMat = marketData(_valuationDate).VolMatrix();
-            List<Date> dates = marketData(_valuationDate).Dates();
-            Calendar cal = marketData(_valuationDate).calendar();
-            List<double> strikes = marketData(_valuationDate).Strikes(currentSpot());
-
-            BlackVarianceSurface mySurface = new BlackVarianceSurface(_valuationDate, cal, dates,
-                                                                    strikes, volMat, marketData(_valuationDate).dayCounter());
-
-            // Surface Declaration
-            Handle<BlackVolTermStructure> mySurfaceH = new Handle<BlackVolTermStructure>(mySurface);
-
-            // Set the process locally 
-            _process = new GeneralizedBlackScholesProcessTol(underlyingH, DivTermStructure, RateTermStructure, mySurfaceH);
-
-        }
-
-        #endregion
-
-
-
-
-        // ************************************************************
         // PROPERTIES - MONTE CARLO PARAMETERS
         // ************************************************************
 
         #region Monte Carlo Parameters
 
         private int _nbSamples = 0;
-        public int nbSamples() {
+        public int nbSamples()
+        {
             if (_nbSamples == 0) { _nbSamples = 10000; }
             return _nbSamples;
         }
@@ -422,26 +289,25 @@ namespace Pascal.Valuation
             if (_nbSteps == 0) { _nbSteps = 100; }
             return _nbSteps;
         }
-
-
+        
         #endregion
 
 
         // ************************************************************
-        // CONSTRUCTOR
+        // CONSTRUCTOR -- MONEYNESS (INCLUDES A STRIKE DATE)
         // ************************************************************
 
-        public BermudeanCliquetBinaryOption(DateTime valuationDate, DateTime strikeDate, List<DateTime> observationDates, 
-            MarkitEquityUnderlying underlying, double couponRate, double barrierMoneyness, double cliquetMoneyness, 
-            Calendar calendar, DayCounter dayCounter, BusinessDayConvention bdc) {
+        public BermudeanCliquetBinaryOption(DateTime strikeDate, List<DateTime> observationDates, // UnderlyingIndex underlying, 
+            double couponRate, double barrierMoneyness, double cliquetMoneyness, //double PDI_Moneyness,
+            Calendar calendar, DayCounter dayCounter, BusinessDayConvention bdc)
+        {
 
             // Dates
-            _valuationDate = valuationDate;
             _strikeDate = strikeDate;
             _observationDates = observationDates;
 
             // Underlying
-            _underlying = underlying;
+            // _underlying = underlying;
 
             // Calendar
             _calendar = calendar;
@@ -454,24 +320,18 @@ namespace Pascal.Valuation
             _singleCliquetMoneyness = cliquetMoneyness;
         }
 
-        public BermudeanCliquetBinaryOption(DateTime strikeDate, List<DateTime> observationDates, MarkitEquityUnderlying underlying,
-            double couponRate, double barrierMoneyness, double cliquetMoneyness, Calendar calendar, DayCounter dayCounter, BusinessDayConvention bdc)
-            : this(new DateTime(), strikeDate, observationDates, underlying, couponRate, barrierMoneyness, cliquetMoneyness, calendar, dayCounter, bdc)
-        { }
-
-
-        public BermudeanCliquetBinaryOption(DateTime valuationDate, DateTime strikeDate, List<DateTime> observationDates,
-             MarkitEquityUnderlying underlying, List<double> coupons, List<double> barrierMoneyness, List<double> cliquetMoneyness, 
+ 
+        public BermudeanCliquetBinaryOption(DateTime strikeDate, List<DateTime> observationDates, // UnderlyingIndex underlying, 
+             List<double> coupons, List<double> barrierMoneyness, List<double> cliquetMoneyness, // double PDI_Moneyness,
              Calendar calendar, DayCounter dayCounter, BusinessDayConvention bdc)
         {
 
             // Dates
-            _valuationDate = valuationDate;
             _strikeDate = strikeDate;
             _observationDates = observationDates;
 
             // Underlying
-            _underlying = underlying;
+            // _underlying = underlying;
 
             // Calendar
             _calendar = calendar;
@@ -485,10 +345,8 @@ namespace Pascal.Valuation
 
         }
 
-        public BermudeanCliquetBinaryOption(DateTime strikeDate, List<DateTime> observationDates, MarkitEquityUnderlying underlying, 
-            List<double> coupons, List<double> barrierMoneyness, List<double> cliquetMoneyness, Calendar calendar, DayCounter dayCounter, BusinessDayConvention bdc)
-            : this(new DateTime(), strikeDate, observationDates, underlying, coupons, barrierMoneyness, cliquetMoneyness, calendar, dayCounter, bdc)
-        { }
+        
+
 
 
         // ************************************************************
@@ -507,7 +365,7 @@ namespace Pascal.Valuation
         {
             return _calendar.adjust(date, _bdc);
         }
-        
+
         protected List<DateTime> Adjust(List<DateTime> dateList)
         {
             List<DateTime> res = new List<DateTime>();
@@ -522,47 +380,23 @@ namespace Pascal.Valuation
 
 
         // ************************************************************
-        // METHODS -- PRICING ENGINE -- PASCAL
+        // METHODS -- PRICING ENGINE --> MERCI MARC !
         // ************************************************************
-
-        #region Pricing Engine
-
-        private IPricingEngine PricingEngine()
-        {
-            return new MakeMCPathDepEngine<PseudoRandom>(process()).withSteps(nbSteps())
-                                                                   .withSamples(nbSamples())
-                                                                   .withAntitheticVariate(true)
-                                                                   .withBrownianBridge(false)
-                                                                   .withSeed(42)
-                                                                   .value();
-        }
-
-        protected void setPricingEngine(IPricingEngine engine) {
-            instrument().setPricingEngine(engine);
-        }
-
         
-        #endregion
-
-
-
-        // ************************************************************
-        // METHODS -- PRICING ENGINE -- MARC
-        // ************************************************************
-
-
         #region Pricing Engine
 
-        private IPricingEngine PricingEngine_Marc()
+        private IPricingEngine PricingEngine(DateTime valuationDate)
         {
-            return new MakeMGenericInstrument<PseudoRandom>(process()).withAbsoluteTolerance(0.1)
+            var _process = process(valuationDate);
+
+            return new MakeMGenericInstrument<PseudoRandom>(_process).withAbsoluteTolerance(0.1)
                                                                    .withStepsPerYear(12)
                                                                    .withSeed(42)
                                                                    .value();
         }
 
 
-        protected void setPricingEngine_Marc(IPricingEngine engine)
+        protected void setPricingEngine(IPricingEngine engine)
         {
             binaire().setPricingEngine(engine);
         }
@@ -570,36 +404,21 @@ namespace Pascal.Valuation
 
         #endregion
 
-
         
-
         // ************************************************************
         // METHODS -- NPV
         // ************************************************************
 
         #region Computational methods for NPV
 
-        public double NPV(DateTime pricingDate) {
-
-            // Set the pricing date for QLNet and locally
-            Settings.setEvaluationDate(pricingDate.ToDate());
-            _valuationDate = pricingDate;
-
-            setPricingEngine(PricingEngine());
-
-            // Price
-            return instrument().NPV();
-        }
-
-
-        public double NPV_Marc(DateTime pricingDate)
+        public double NPV(DateTime pricingDate)
         {
 
             // Set the pricing date for QLNet and locally
             Settings.setEvaluationDate(pricingDate.ToDate());
             _valuationDate = pricingDate;
 
-            setPricingEngine_Marc(PricingEngine_Marc());
+            setPricingEngine(PricingEngine(pricingDate));
 
             // Price
             return binaire().NPV();
@@ -608,12 +427,7 @@ namespace Pascal.Valuation
 
         #endregion
 
-
-
-
-
-
-
+        
 
     }
 

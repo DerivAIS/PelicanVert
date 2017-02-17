@@ -100,7 +100,7 @@ namespace QLyx.Containers
         }
 
 
-        // Constructor 2 : Interest Rate Line
+        // Constructor 3 : Equity Line
         public myFrame(List<Equity_Line> databaseLines)
         {
 
@@ -124,7 +124,7 @@ namespace QLyx.Containers
         }
 
 
-        // Constructor 2 : Interest Rate Line
+        // Constructor 4 : Equity Volatility
         public myFrame(List<EquityVolatility_Line> databaseLines)
         {
 
@@ -148,7 +148,28 @@ namespace QLyx.Containers
         }
 
 
- 
+        // Constructor 5 : Equity Volatility
+        public myFrame(List<Bond_Line> databaseLines)
+        {
+
+            // 1. Perform checks on number of series @TODO
+            if (databaseLines.Count() != 0)
+            {
+
+                // 2. Extract fields from any DB line
+                List<string> fieldsList = databaseLines.FirstOrDefault().GetDataFields();
+
+                // 3. Fill this object
+                foreach (Bond_Line line in databaseLines)
+                {
+                    foreach (string field in fieldsList)
+                    {
+                        data[line.Date] = new myElement(line.ToDict());
+                    }
+                }
+
+            }
+        }
 
 
         #endregion
