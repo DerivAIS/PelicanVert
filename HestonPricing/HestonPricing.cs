@@ -10,7 +10,7 @@ using System.Text;
 using QLNet;
 
 
-namespace Autocall
+namespace HestonAutocall
 {
     class HestonAutocall
     {
