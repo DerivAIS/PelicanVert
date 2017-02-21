@@ -1,4 +1,9 @@
-﻿using System;
+﻿
+
+///////  Marc RAYGOT - 2017   ///////
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,22 +31,24 @@ namespace Autocall
 
             ////////////////  MARKET  //////////////////////////////////////////////
 
+            // Spot
             double underlying = 100;
-            double dividendYield = 0.035;
-            double riskFreeRate = 0.01;
-            double intensity = 0.02;
-            double volatility = 0.20;
-
-            Handle<YieldTermStructure> flatTermStructure = new Handle<YieldTermStructure>(new FlatForward(settlementDate, riskFreeRate, dayCounter));
-            Handle<DefaultProbabilityTermStructure> flatHazardStructure = new Handle<DefaultProbabilityTermStructure>(new FlatHazardRate(settlementDate, intensity, dayCounter));
-
-            Period forwardStart = new Period(1, TimeUnit.Days);
-            DayCounter swFixedLegDayCounter = new Thirty360(Thirty360.Thirty360Convention.European);
-            IborIndex swFloatingLegIndex = new Euribor6M();
-
-
             Handle<Quote> underlyingH = new Handle<Quote>(new SimpleQuote(underlying));
+
+            // riskfree
+            double riskFreeRate = 0.01;
+            Handle<YieldTermStructure> flatTermStructure = new Handle<YieldTermStructure>(new FlatForward(settlementDate, riskFreeRate, dayCounter));
+
+
+            // dividend
+            double dividendYield = 0.035;
+            double fixedDiv = 5.0;
+
             Handle<YieldTermStructure> flatDividendTS = new Handle<YieldTermStructure>(new FlatForward(settlementDate, dividendYield, dayCounter));
+            Handle<YieldTermStructure> FixedDivTermStructure = new Handle<YieldTermStructure>(new FixedForward(settlementDate, fixedDiv, underlying, dayCounter));
+
+            // flatvol
+            double volatility = 0.20;
             Handle<BlackVolTermStructure> flatVolTS = new Handle<BlackVolTermStructure>(new BlackConstantVol(settlementDate, calendar, volatility, dayCounter));
 
             Console.WriteLine("Underlying price = " + underlying);
@@ -50,7 +57,7 @@ namespace Autocall
             Console.WriteLine("Flat Volatility = {0:0.00%}", volatility);
             Console.Write("\n");
 
-            ////////////////  VOL SURFACE  //////////////////////////////////////////////
+            // volSurface
 
             List<Date> datesVol = new InitializedList<Date>();
             List<double> strikesVol = new InitializedList<double>();
@@ -74,16 +81,14 @@ namespace Autocall
 
 
 
-            BlackVarianceSurface mySurface = new BlackVarianceSurface(settlementDate,
-                                                                    calendar,
-                                                                    datesVol,
-                                                                    strikesVol,
-                                                                    blackVolMatrix,
-                                                                    dayCounter);
+            BlackVarianceSurface mySurface = new BlackVarianceSurface(settlementDate,calendar,datesVol,
+                                                                    strikesVol,blackVolMatrix,dayCounter);
 
             Handle<BlackVolTermStructure> mySurfaceH = new Handle<BlackVolTermStructure>(mySurface);
 
-            GeneralizedBlackScholesProcessTolerance bsmProcessVolSurface = new GeneralizedBlackScholesProcessTolerance(underlyingH, flatDividendTS, flatTermStructure, mySurfaceH);
+
+            // process
+            GeneralizedBlackScholesProcessTolerance bsmProcessVolSurface = new GeneralizedBlackScholesProcessTolerance(underlyingH, FixedDivTermStructure, flatTermStructure, mySurfaceH);
             GeneralizedBlackScholesProcessTolerance bsmProcess = new GeneralizedBlackScholesProcessTolerance(underlyingH, flatDividendTS, flatTermStructure, flatVolTS);
 
 
@@ -122,6 +127,8 @@ namespace Autocall
             Console.Write("\n");
             Console.WriteLine("Test - NoValue = {0:0.0000%}", myGenericAutocall.inspout("NoValue"));
 
+
+            // inspout() function
             Console.Write("\n");
             myGenericAutocall.inspout();
 

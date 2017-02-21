@@ -241,7 +241,7 @@ namespace QLNet
             Dictionary<string, List<double>> timesDico = new Dictionary<string, List<double>>();
             List<double> tempTime = new InitializedList<double>();
 
-            GeneralizedBlackScholesProcess process = process_ as GeneralizedBlackScholesProcess;
+            GeneralizedBlackScholesProcessTolerance process = process_ as GeneralizedBlackScholesProcessTolerance;
 
 
             List<string>  keyList = new List<string>(datesDico.Keys);
