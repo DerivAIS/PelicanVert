@@ -69,17 +69,16 @@
     <Compile Include="Pricing\Vol Surface\LocalVolSurfaceWithTolerance.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Valuation\Support PAC\Valmy\Generic\CliquetBinary.cs" />
-    <Compile Include="Valuation\Support PAC\Valmy\Generic\CliquetBinary_Exercise.cs" />
-    <Compile Include="Valuation\Support PAC\Valmy\Generic\CliquetBinary_Instrument.cs" />
-    <Compile Include="Valuation\Support PAC\Valmy\Generic\CliquetBinary_Payoff.cs" />
+    <Compile Include="Valuation\Support PAC\Valmy\Generic\Bermudean Cliquet Binary\CliquetBinary.cs" />
+    <Compile Include="Valuation\Support PAC\Valmy\Generic\European Funded PDI\FundedPDI_Kernel.cs" />
+    <Compile Include="Valuation\Support PAC\Valmy\Generic\European Funded PDI\PDI_funded.cs" />
     <Compile Include="Valuation\Support PAC\Valmy\Generic\ZC_Stream.cs" />
     <Compile Include="Valuation\Service SGI\SGIXESPE\SGIXESPE.cs" />
     <Compile Include="Valuation\Service SGI\SGIXESPU\SGIXESPU.cs" />
     <Compile Include="Valuation\Service SGI\_Generic\EquityIndexStrangleStrategy.cs" />
     <Compile Include="Valuation\Service SGI\_Generic\IEquityIndexStrangleStrategy.cs" />
     <Compile Include="Valuation\Support PAC\Valmy\BTP_Repack.cs" />
-    <Compile Include="Valuation\Support PAC\Valmy\Generic\Binaire_Script.cs" />
+    <Compile Include="Valuation\Support PAC\Valmy\Generic\Bermudean Cliquet Binary\CliquetBinary_Kernel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

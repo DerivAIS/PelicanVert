@@ -13,7 +13,7 @@ namespace Pascal.Pricing.Underlyings
         ISXEC50 = 141,
 
         // INDE1EDFI
-        IND1EDFI = 142,
+        IND1EDFI = 146,
 
         // INDE1EDFJ
         IND1EDFJ = 133,

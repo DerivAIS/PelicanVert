@@ -437,6 +437,17 @@ namespace QLyx.DataIO
 
 
 
+        // ************************************************************
+        // SANITY CHECKS
+        // ************************************************************
+
+        public bool isNull()
+        {
+            if (Open == null && Close == null && Low == null && High == null) { return true; }
+            return false;
+        }
+
+
     }
 
 }

@@ -9,14 +9,14 @@ using QLNet;
 namespace Pascal.Pricing.Instruments
 {
 
-    public class ScriptedBinaire : GenericInstrument
+    public class Kernel_BinaryCliquet : GenericInstrument
     {
         
-        public ScriptedBinaire(List<Date> observationDates,
+        public Kernel_BinaryCliquet(List<Date> observationDates,
             double coupon,
             double barrierMoneyness,
             double cliquetMoneyness,
-            // double PDI_Moneyness,
+            double PDI_Moneyness,
             double strikeLevel,
             double FixDiv_points = 0.0,
             double CashYield = 0.0)
@@ -25,7 +25,7 @@ namespace Pascal.Pricing.Instruments
                        BuildDico("Coupons", coupon),
                        BuildDico("Barrier_Moneyness", barrierMoneyness),
                        BuildDico("Cliquet_Moneyness", cliquetMoneyness),
-                       //BuildDico("PDI_Moneyness", PDI_Moneyness),
+                       BuildDico("PDI_Moneyness", PDI_Moneyness),
                        BuildDico("Fixed_Dividend", FixDiv_points),
                        BuildDico("Cash_yield", CashYield),
                        BuildDico("Strike_Level", strikeLevel))
@@ -64,17 +64,21 @@ namespace Pascal.Pricing.Instruments
             double pathValue = 0.0;
             double strike = indexDico["Strike_Level"][0];
 
+            // INSPOUT("SpotPricing", IL);
+
             // Go through all dates //
             for (int t = 1; t < path.length(); t++)
             {
 
                 // Compute the path based for fixed div index
                 dT = path.time(t) - previous_Time;
-                IL = ( path.value(t) / previous_UIL ) * previous_IL * (1 + dT * cashYield) - DivFix * dT;
+
+                IL = Math.Max(( path.value(t) / previous_UIL ) * previous_IL * (1 + dT * cashYield) - DivFix * dT, 0.0);
+
                 previous_Time = path.time(t);
                 
-                //
-                if (path.time(t) == timeDico["Observation_Dates"][i]){
+                // Payoff evaluation on observation dates
+                if (Math.Round(path.time(t),4) == Math.Round(timeDico["Observation_Dates"][i], 4)){
 
                     pathValue = path.value(t);
                     fixingValue = IL;
@@ -86,13 +90,13 @@ namespace Pascal.Pricing.Instruments
                     else if (yield >= cliquetMoney)
                     {
                         isCliquet = true;
-                        payoff += couponRate * discount;
+                        payoff += couponRate * discount; 
                         INSPOUT("Cliquet", 1.0);
                     }
 
                     else if (yield >= barrierMoney)
                     {
-                        payoff += couponRate * discount;
+                        payoff += couponRate * discount; 
                     }
 
                     i++;
@@ -100,34 +104,28 @@ namespace Pascal.Pricing.Instruments
             }
 
             fixingValue = path.value(path.length()-1);
-            yield = fixingValue / strike;
+            yield = IL / strike;
        
             INSPOUT("AvgYield", yield);
-            return payoff;
-
-            // if no previous payoff compute last redemption //
-            /*
-            fixingValue = path.value(path.length() - 1);
-            yield = fixingValue / strike;
-
+            
             discount = discountTS.link.discount(path.time(path.length() - 1), true);
             double PDI_barrier = indexDico["PDI_Moneyness"][0];
 
             if (yield < PDI_barrier){
-                    payoff += yield * discount;
-                    INSPOUT("ProbaDown", 1.0);
-                    INSPOUT("AvgDown", yield);
+                    payoff += 1.43 * (yield-1.0) * discount;
+                    //INSPOUT("ProbaDown", 1.0);
+                    //INSPOUT("AvgDown", yield);
                 }
 
             else{
-                    payoff += discount;
-                    INSPOUT("ProbaMid", 1.0);
-                    INSPOUT("AvgMid", yield);
+                    payoff += 0.0;
+                    //INSPOUT("ProbaMid", 1.0);
+                    //INSPOUT("AvgMid", yield);
             }
 
             // return payoff 
             return payoff;
-            */
+            
         }
     }
 }

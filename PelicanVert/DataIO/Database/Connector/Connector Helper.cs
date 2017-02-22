@@ -97,6 +97,16 @@ namespace QLyx.DataIO.Connector
         {
             myDB_Connector myConnect = new myDB_Connector();
             List<Equity_Line> myRes = myConnect.Select<Equity_Line>(myRequest.id.DBID, myRequest.fields, myRequest.startDate, myRequest.endDate);
+
+            int MaxRetry = 10;
+            int retry = 0;
+            /*
+            foreach (Equity_Line line in myRes)
+            {
+                if (line.isNull()) { retry += 1; }
+                if (retry >= MaxRetry) { return new myFrame(); }
+            }
+            */
             return new myFrame(myRes);
         }
 

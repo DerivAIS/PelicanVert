@@ -31,7 +31,7 @@ namespace Pascal.Valuation
         #region Underlying
 
         // Underlying id
-        protected MarkitEquityUnderlying _underlyingMarkitID;
+        // protected MarkitEquityUnderlying _underlyingMarkitID;
 
         // Underlying
         protected T _underlying;
@@ -100,17 +100,19 @@ namespace Pascal.Valuation
         // ************************************************************
         // PROPERTIES - OPTIONS DEFINITION
         // ************************************************************
-        
+
         #region Option definition
 
-        protected ScriptedBinaire _binaire;
-        public ScriptedBinaire binaire()
+        protected double _PDI_barrier;
+
+        protected Kernel_BinaryCliquet _kernel;
+        public Kernel_BinaryCliquet kernel()
         {
-            if (_binaire == null) { SetScriptedBinaire(); }
-            return _binaire;
+            if (_kernel == null) { SetKernel(); }
+            return _kernel;
         }
 
-        protected void SetScriptedBinaire()
+        protected void SetKernel()
         {
             // Dates
             List<Date> _dates = new List<Date>();
@@ -119,12 +121,14 @@ namespace Pascal.Valuation
                 _dates.Add(dt.ToDate());
             }
 
-            // strike level NOT OK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            double thisStrike = underlying().spot(_strikeDate); // -------------> le spot n'est pas le bon... ça ne retourne pas le niveau
+            
+            double thisStrike = underlying().spot(_strikeDate);
+
+            double PDI_barrier = _PDI_barrier; 
 
             // Instanciate
-            _binaire = new ScriptedBinaire(_dates, _couponRate, _singleStrikeMoneyness,
-                _singleCliquetMoneyness, thisStrike, _underlying.fixDiv(), _underlying.drift());
+            _kernel = new Kernel_BinaryCliquet(_dates, _couponRate, _singleStrikeMoneyness,
+                _singleCliquetMoneyness, PDI_barrier,thisStrike, _underlying.fixDiv(), _underlying.drift());
 
         }
 
@@ -297,8 +301,8 @@ namespace Pascal.Valuation
         // CONSTRUCTOR -- MONEYNESS (INCLUDES A STRIKE DATE)
         // ************************************************************
 
-        public BermudeanCliquetBinaryOption(DateTime strikeDate, List<DateTime> observationDates, // UnderlyingIndex underlying, 
-            double couponRate, double barrierMoneyness, double cliquetMoneyness, //double PDI_Moneyness,
+        public BermudeanCliquetBinaryOption(DateTime strikeDate, List<DateTime> observationDates, 
+            double couponRate, double barrierMoneyness, double cliquetMoneyness, double PDI_Moneyness,
             Calendar calendar, DayCounter dayCounter, BusinessDayConvention bdc)
         {
 
@@ -318,11 +322,12 @@ namespace Pascal.Valuation
             _couponRate = couponRate;
             _singleStrikeMoneyness = barrierMoneyness;
             _singleCliquetMoneyness = cliquetMoneyness;
+            _PDI_barrier = PDI_Moneyness;
         }
 
  
-        public BermudeanCliquetBinaryOption(DateTime strikeDate, List<DateTime> observationDates, // UnderlyingIndex underlying, 
-             List<double> coupons, List<double> barrierMoneyness, List<double> cliquetMoneyness, // double PDI_Moneyness,
+        public BermudeanCliquetBinaryOption(DateTime strikeDate, List<DateTime> observationDates, 
+             List<double> coupons, List<double> barrierMoneyness, List<double> cliquetMoneyness, double PDI_Moneyness,
              Calendar calendar, DayCounter dayCounter, BusinessDayConvention bdc)
         {
 
@@ -342,6 +347,9 @@ namespace Pascal.Valuation
             SetCouponsLevels(coupons);
             SetStrikeLevels(barrierMoneyness);
             SetCliquetLevels(cliquetMoneyness);
+
+            // PDI moneyness (as scalar, at maturity only)
+            _PDI_barrier = PDI_Moneyness;
 
         }
 
@@ -398,7 +406,7 @@ namespace Pascal.Valuation
 
         protected void setPricingEngine(IPricingEngine engine)
         {
-            binaire().setPricingEngine(engine);
+            kernel().setPricingEngine(engine);
         }
 
 
@@ -421,7 +429,7 @@ namespace Pascal.Valuation
             setPricingEngine(PricingEngine(pricingDate));
 
             // Price
-            return binaire().NPV();
+            return kernel().NPV();
         }
 
 

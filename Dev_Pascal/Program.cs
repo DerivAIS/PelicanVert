@@ -54,15 +54,16 @@ namespace Dev_Pascal
             // *********************************************************************************
 
             Period freq = new Period(1, TimeUnit.Years);
+            DateTime firstDate = new DateTime(2016, 11, 01);
 
             List<DateTime> dates = new List<DateTime>();
-            for (int i = 1; i <= 10; i++) {
-                dates.Add((pricingDate.ToDate() + freq*i).ToDateTime());
+            for (int i = 1; i < 10; i++) {
+                dates.Add((firstDate.ToDate() + freq*i).ToDateTime());
             }
 
             DateTime strikeDate = new DateTime(2014, 06, 18);
 
-            
+
             //FixedDivIndex FSEURE = new FixedDivIndex(PricingUnderlying.IND1EDFI, MarkitEquityUnderlying.Eurostoxx, 0, 0, 0.5, 1.00);
             //var sdsd = FSEURE.impliedVolatilitySurface(pricingDate);
 
@@ -71,12 +72,24 @@ namespace Dev_Pascal
             double barrierLevel = 0.70;
             double cliquetLevel = 1.21;
 
-            BermudeanCliquetBinaryOption<IND1EDFI> opt = new BermudeanCliquetBinaryOption<IND1EDFI>(strikeDate, dates, couponLevel, barrierLevel, cliquetLevel, new TARGET(), 
-                new Actual365Fixed(), BusinessDayConvention.Preceding);
 
-            double px = opt.NPV(pricingDate);
-            // double probaDown = opt.binaire().inspout("AvgMid");
+            BermudeanCliquetBinaryOption<IND1EDFI> opt = new BermudeanCliquetBinaryOption<IND1EDFI>(strikeDate, dates, couponLevel, barrierLevel, cliquetLevel, barrierLevel, new TARGET(),
+                        new Actual365Fixed(), BusinessDayConvention.Preceding);
 
+            // double px_bin = opt.NPV(pricingDate);
+            // double spotPricing = opt.kernel().inspout("SpotPricing");
+            // double yield = opt.kernel().inspout("AvgYield");
+
+            double strikeMoneynessPDI = 1.0;
+            double leverage = 1.43;
+
+            European_Funded_PDI<IND1EDFI> pdi = new European_Funded_PDI<IND1EDFI>(strikeDate, dates, strikeMoneynessPDI, barrierLevel, leverage, 
+                new TARGET(), new Actual365Fixed(), BusinessDayConvention.Preceding);
+
+            double px_pdi = pdi.NPV(pricingDate);
+            double yield = pdi.kernel().inspout("Yield_final");
+            double yield_UIL = pdi.kernel().inspout("Yield_UIL");
+            //double yield_1 = pdi.kernel().inspout("Yield_1");
 
 
             throw new NotImplementedException();

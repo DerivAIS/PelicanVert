@@ -476,6 +476,11 @@ namespace QLyx.DataIO.Markit
 
         public Matrix VolMatrix(double scalingLevel)
         {
+            if (scalingLevel == 1.0) { return VolMatrix(); }
+
+            Console.WriteLine("WARNING : DOES NOT WORK.");
+            throw new NotImplementedException();
+
             int rows = Strikes().Count();
             int cols = _data.Count();
 
@@ -505,6 +510,12 @@ namespace QLyx.DataIO.Markit
 
         public Matrix VolMatrix(double scalingLevel, double smileLevel)
         {
+            
+            if(scalingLevel == 1.0 && smileLevel == 1.0) { return VolMatrix(); }
+
+            Console.WriteLine("WARNING : DOES NOT WORK.");
+            throw new NotImplementedException();
+
             int rows = Strikes().Count();
             int cols = _data.Count();
 
