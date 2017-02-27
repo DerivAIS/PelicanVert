@@ -232,12 +232,17 @@ namespace QLNet
         #region PathPricer
         protected override IPathGenerator<IRNG> pathGenerator()
         {
-            int dimensions = process_.factors();
+             
+
+        int dimensions = process_.factors();
             TimeGrid grid = timeGrid();
             IRNG generator = (IRNG)new RNG().make_sequence_generator(dimensions * (grid.size() - 1), seed_);
 
             string type = process_.GetType().ToString();
-            if (type == "QLNet.GeneralizedBlackScholesProcessTolerance")
+  
+
+            if ((type == "QLNet.GeneralizedBlackScholesProcessTolerance" ) ||
+                (type == "QLNet.GeneralizedBlackScholesProcess"))
             {
                 return new PathGenerator<IRNG>(process_, grid, generator, brownianBridge_);
             }
@@ -261,11 +266,9 @@ namespace QLNet
 
             Dictionary<string, List<double>> indexDico = arguments_.indexDico;
             Dictionary<string, List<Date>> datesDico = arguments_.datesDico;
-            Func<GenericScriptInstrument.Script.ScriptFunctions,GenericScriptInstrument.Script.ScriptData, double> scriptFunc = arguments_.scriptFunc;
+            Func<GenericScriptInstrument.Script.ScriptFunctions, GenericScriptInstrument.Script.ScriptData, double> scriptFunc = arguments_.scriptFunc;
             Dictionary<string, List<double>> timesDico = new Dictionary<string, List<double>>();
             List<double> tempTime = new InitializedList<double>();
-            //GeneralizedBlackScholesProcessTolerance process = process_ as GeneralizedBlackScholesProcessTolerance;
-            //StochasticProcess1D process = null;
 
             List<string> keyList = new List<string>(datesDico.Keys);
 
@@ -282,36 +285,48 @@ namespace QLNet
 
 
             string type = process_.GetType().ToString();
-            if (type == "QLNet.GeneralizedBlackScholesProcessTolerance")
-            {
-                GeneralizedBlackScholesProcessTolerance process = process_ as GeneralizedBlackScholesProcessTolerance;
-                return new GenericScriptInstrumentPathPricer(timesDico,
-                                                         indexDico,
-                                                         process.riskFreeRate(),
-                                                         scriptFunc, creditTS_,
-                                                         process.dividendYield(),
-                                                         process.blackVolatility());
-            }
 
-            else if (type == "QLNet.HestonProcess")
+            switch (type)
             {
-                HestonProcess process = process_ as HestonProcess;
-                return new GenericScriptInstrumentPathPricer(timesDico,
-                                                         indexDico,
-                                                         process.riskFreeRate(),
-                                                         scriptFunc);
-            }
+                case "QLNet.GeneralizedBlackScholesProcessTolerance":
+                    {
+                        GeneralizedBlackScholesProcessTolerance process = process_ as GeneralizedBlackScholesProcessTolerance;
+                        return new GenericScriptInstrumentPathPricer(timesDico,
+                                                                 indexDico,
+                                                                 process.riskFreeRate(),
+                                                                 scriptFunc, creditTS_,
+                                                                 process.dividendYield(),
+                                                                 process.blackVolatility());
+                    }
 
-            else
-            {
+                case "QLNet.GeneralizedBlackScholesProcess":
+                    {
+                        GeneralizedBlackScholesProcess process = process_ as GeneralizedBlackScholesProcess;
+                        return new GenericScriptInstrumentPathPricer(timesDico,
+                                                                 indexDico,
+                                                                 process.riskFreeRate(),
+                                                                 scriptFunc, creditTS_,
+                                                                 process.dividendYield(),
+                                                                 process.blackVolatility());
+                    }
 
-                Utils.QL_FAIL("Process not implemented");
-                throw new NotImplementedException();
+                case "QLNet.HestonProcess":
+                    {
+                        HestonProcess process = process_ as HestonProcess;
+                        return new GenericScriptInstrumentPathPricer(timesDico,
+                                                                 indexDico,
+                                                                 process.riskFreeRate(),
+                                                                 scriptFunc);
+                    }
+                default:
+                    {
+                        Utils.QL_FAIL("Process not implemented");
+                        throw new NotImplementedException();
+                    }
             }
-                
         }
      
-
+        
 
         public class GenericScriptInstrumentPathPricer : PathPricer<IPath>
         {
