@@ -46,8 +46,6 @@ namespace HestonAutocall
             Handle<YieldTermStructure> FixedDivTermStructure = new Handle<YieldTermStructure>(new FixedForward(settlementDate, fixedDiv, underlying, dayCounter));
 
             // vol surface
-            //List<Date> datesVol = new InitializedList<Date>();
-            //List<double> strikesVol = new InitializedList<double>();
 
             Date StartDateVol = settlementDate + new Period(1, TimeUnit.Months);
 
@@ -103,8 +101,7 @@ namespace HestonAutocall
             {
                 for (int d = 0; d < datesVol.Count; d++)
                 {
-                    //int testc = datesVol[4]- settlementDate ;
-                    //helperPeriod = new Period((int)(((double)maturityInDays[d] + 3.0) / 7.0), TimeUnit.Weeks);
+
                     helperPeriod = new Period(datesVol[d] - settlementDate, TimeUnit.Days);
                     calibrationHelpers.Add(new HestonModelHelper(helperPeriod,
                                                                  calendar,
@@ -173,7 +170,7 @@ namespace HestonAutocall
             Console.WriteLine();
 
             int StepsPerYear = 52;
-            double absoluteTolerance = 2.0;
+            double absoluteTolerance = 80.0;
             ulong mcSeed = 42;
 
             // MC Heston process
@@ -198,19 +195,18 @@ namespace HestonAutocall
                                 .withSeed(mcSeed)
                                 .getAsPricingEngine();
 
-            double absoluteTolerance2 = 0.1;
-            IPricingEngine mcGenHestonEngine = new MakeMGenericHestonInstrument<PseudoRandom>(calibratedHestonProcess)
+            double absoluteTolerance2 = 1.0;
+            IPricingEngine mcGenHestonEngineTestbs = new MakeMCGenericScriptInstrument<PseudoRandom>(bsmProcess)
                                .withStepsPerYear(StepsPerYear)
                                .withAbsoluteTolerance(absoluteTolerance2)
                                .withSeed(mcSeed)
                                .value();
 
-            double absoluteTolerance3 = 0.1;
-            IPricingEngine mcengine = new MakeMGenericInstrument<PseudoRandom>(bsmProcess)
-                                                                .withAbsoluteTolerance(absoluteTolerance3)
-                                                                .withStepsPerYear(52)
-                                                                .withSeed(50)
-                                                                .value();
+            IPricingEngine mcGenHestonEngineTestbs2 = new MakeMCGenericScriptInstrument<PseudoRandom>(calibratedHestonProcess)
+                              .withStepsPerYear(StepsPerYear)
+                              .withAbsoluteTolerance(absoluteTolerance2)
+                              .withSeed(mcSeed)
+                              .value();
 
 
             ////////////////  PRICING  //////////////////////////////////////////////
@@ -252,58 +248,42 @@ namespace HestonAutocall
             for (int i = 1; i <= 4; i++)
                 fixingdates.Add(settlementDate + new Period(i, TimeUnit.Years));
 
-            HestonGenericAutocall myGenericAutocallHT = new HestonGenericAutocall(fixingdates, coupon, barrierlvl, underlying);
+            ScriptGenericAutocall myGenericAutocallHTTEst = new ScriptGenericAutocall(fixingdates, coupon, barrierlvl, underlying);
 
-            myGenericAutocallHT.setPricingEngine(mcGenHestonEngine);
+            myGenericAutocallHTTEst.setPricingEngine(mcGenHestonEngineTestbs);
 
-            ////////////////  AUTOCALL BS //////////////////////////////////////////////
-
-
-
-            for (int i = 1; i <= 4; i++)
-                fixingdates.Add(settlementDate + new Period(i, TimeUnit.Years));
-
-            GenericAutocall myGenericAutocallBS = new GenericAutocall(fixingdates, coupon, barrierlvl, underlying);
-
-            myGenericAutocallBS.setPricingEngine(mcengine);
-
-
-
-
-            ////////////////  Printing Results  //////////////////////////////////////////////
-            Console.WriteLine("Pricing Autocall BS:");
-            Console.WriteLine("--------------------");
-            Console.WriteLine("NPV Generic Autocall = {0:0.0000}", myGenericAutocallBS.NPV());
-            Console.WriteLine("Err = {0:0.0000%}", myGenericAutocallBS.errorEstimate() / myGenericAutocallBS.NPV());
-            Console.WriteLine("Samples = {0}", myGenericAutocallBS.samples());
+            Console.WriteLine("Pricing Autocall BS :");
+            Console.WriteLine("---------------------");
+            Console.WriteLine("test = {0:0.0000}", myGenericAutocallHTTEst.NPV());
+            Console.WriteLine("Err = {0:0.0000%}", myGenericAutocallHTTEst.errorEstimate() / myGenericAutocallHTTEst.NPV());
+            Console.WriteLine("Samples = {0}", myGenericAutocallHTTEst.samples());
             Console.Write("\n");
 
             for (int i = 0; i < 4; i++)
-                Console.WriteLine("ProbaCall {1} = {0:0.0000%}", myGenericAutocallBS.inspout("ProbaCall " + i), i + 1);
-            Console.WriteLine("ProbaMid = {0:0.0000%}", myGenericAutocallBS.inspout("ProbaMid"));
-            Console.WriteLine("probaDown = {0:0.0000%}", myGenericAutocallBS.inspout("ProbaDown"));
-            Console.WriteLine("AvgDown/Proba = {0:0.0000%}", myGenericAutocallBS.inspout("AvgDown") / myGenericAutocallBS.inspout("ProbaDown"));
-
+                Console.WriteLine("ProbaCall {1} = {0:0.0000%}", myGenericAutocallHTTEst.inspout("ProbaCall " + i), i + 1);
+            Console.WriteLine("ProbaMid = {0:0.0000%}", myGenericAutocallHTTEst.inspout("ProbaMid"));
+            Console.WriteLine("probaDown = {0:0.0000%}", myGenericAutocallHTTEst.inspout("ProbaDown"));
+            Console.WriteLine("test = {0:0.0000%}", myGenericAutocallHTTEst.inspout("ProbaDown"));
+            Console.WriteLine("AvgDown/Proba = {0:0.0000%}", myGenericAutocallHTTEst.inspout("AvgDown") / myGenericAutocallHTTEst.inspout("ProbaDown"));
             Console.Write("\n");
+
+
+            myGenericAutocallHTTEst.setPricingEngine(mcGenHestonEngineTestbs2);
 
             Console.WriteLine("Pricing Autocall Heston:");
-            Console.WriteLine("-----------------------");
-            Console.WriteLine("NPV Generic Autocall = {0:0.0000}", myGenericAutocallHT.NPV());
-            Console.WriteLine("Err = {0:0.0000%}", myGenericAutocallHT.errorEstimate() / myGenericAutocallHT.NPV());
-            Console.WriteLine("Samples = {0}", myGenericAutocallHT.samples());
+            Console.WriteLine("------------------------");
+            Console.WriteLine("test = {0:0.0000}", myGenericAutocallHTTEst.NPV());
+            Console.WriteLine("Err = {0:0.0000%}", myGenericAutocallHTTEst.errorEstimate() / myGenericAutocallHTTEst.NPV());
+            Console.WriteLine("Samples = {0}", myGenericAutocallHTTEst.samples());
             Console.Write("\n");
 
             for (int i = 0; i < 4; i++)
-                Console.WriteLine("ProbaCall {1} = {0:0.0000%}", myGenericAutocallHT.inspout("ProbaCall " + i), i + 1);
-            Console.WriteLine("ProbaMid = {0:0.0000%}", myGenericAutocallHT.inspout("ProbaMid"));
-            Console.WriteLine("probaDown = {0:0.0000%}", myGenericAutocallHT.inspout("ProbaDown"));
-            Console.WriteLine("AvgDown/Proba = {0:0.0000%}", myGenericAutocallHT.inspout("AvgDown") / myGenericAutocallHT.inspout("ProbaDown"));
-
+                Console.WriteLine("ProbaCall {1} = {0:0.0000%}", myGenericAutocallHTTEst.inspout("ProbaCall " + i), i + 1);
+            Console.WriteLine("ProbaMid = {0:0.0000%}", myGenericAutocallHTTEst.inspout("ProbaMid"));
+            Console.WriteLine("probaDown = {0:0.0000%}", myGenericAutocallHTTEst.inspout("ProbaDown"));
+            Console.WriteLine("test = {0:0.0000%}", myGenericAutocallHTTEst.inspout("ProbaDown"));
+            Console.WriteLine("AvgDown/Proba = {0:0.0000%}", myGenericAutocallHTTEst.inspout("AvgDown") / myGenericAutocallHTTEst.inspout("ProbaDown"));
             Console.Write("\n");
-
-
-
-
 
 
             ////////////////  END TEST  //////////////////////////////////////////////
