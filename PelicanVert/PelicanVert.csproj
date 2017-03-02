@@ -69,6 +69,8 @@
     <Compile Include="DataIO\Database\Data Containers\Base\GenericDatabaseTable.cs" />
     <Compile Include="DataIO\Database\Data Containers\Base\IGenericDatabaseLine.cs" />
     <Compile Include="DataIO\Database\Data Containers\Base\IGenericDatabaseTable.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Bond\Bond Line.cs" />
+    <Compile Include="DataIO\Database\Data Containers\Bond\Bond Table.cs" />
     <Compile Include="DataIO\Database\Data Containers\Equity Volatility\Equity Volatility Line.cs" />
     <Compile Include="DataIO\Database\Data Containers\Equity Volatility\Equity Volatility Table.cs" />
     <Compile Include="DataIO\Database\Data Containers\Equity\Equity Line.cs" />
@@ -183,7 +185,6 @@
     <Compile Include="Simulation\Strategy\IStrategy.cs" />
     <Compile Include="Simulation\Strategy\MarkitStrategy.cs" />
     <Compile Include="Simulation\Utilities\Utilities.cs" />
-    <Compile Include="Test\testclasse.cs" />
     <Compile Include="TimeSeries\myElement.cs" />
     <Compile Include="TimeSeries\myFrame OLD.cs" />
     <Compile Include="TimeSeries\myFrame.cs" />

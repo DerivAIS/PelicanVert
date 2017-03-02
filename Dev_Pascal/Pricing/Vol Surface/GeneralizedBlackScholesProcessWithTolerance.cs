@@ -4,14 +4,14 @@ using System;
 namespace QLNet
 {
 
-    public class GeneralizedBlackScholesProcessTol : GeneralizedBlackScholesProcess
+    public class GeneralizedBlackScholesProcessTolerance : GeneralizedBlackScholesProcess
     {
 
-        /*public GeneralizedBlackScholesProcessTolerance(Handle<Quote> x0, Handle<YieldTermStructure> dividendTS,
+        /*public GeneralizedBlackScholesProcessToleranceerance(Handle<Quote> x0, Handle<YieldTermStructure> dividendTS,
            Handle<YieldTermStructure> riskFreeTS, Handle<BlackVolTermStructure> blackVolTS, IDiscretization1D disc = null)
             : base(disc ?? new EulerDiscretization())*/
 
-        public GeneralizedBlackScholesProcessTol(Handle<Quote> x0, Handle<YieldTermStructure> dividendTS,
+        public GeneralizedBlackScholesProcessTolerance(Handle<Quote> x0, Handle<YieldTermStructure> dividendTS,
            Handle<YieldTermStructure> riskFreeTS, Handle<BlackVolTermStructure> blackVolTS, IDiscretization1D disc = null)
             : base(x0, dividendTS, riskFreeTS, blackVolTS, disc)
         {

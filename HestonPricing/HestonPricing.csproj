@@ -55,10 +55,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Main_mr\Dev_Marc.csproj">
-      <Project>{714932ae-abb0-4a61-b52e-c7f678e0bb3c}</Project>
-      <Name>Dev_Marc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PelicanVert\PelicanVert.csproj">
       <Project>{f5c176a6-55a3-4b3a-be01-425f6d059cce}</Project>
       <Name>PelicanVert</Name>

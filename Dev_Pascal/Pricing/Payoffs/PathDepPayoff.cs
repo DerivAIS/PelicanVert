@@ -11,7 +11,7 @@ namespace Pascal.Pricing.Payoffs
     public class PathDepPayoff : Payoff
     {
 
-        public double value(Path path, EarlyExercise exercise_, GeneralizedBlackScholesProcessTol process_) {
+        public double value(Path path, EarlyExercise exercise_, GeneralizedBlackScholesProcessTolerance process_) {
             throw new NotImplementedException();
         }
 

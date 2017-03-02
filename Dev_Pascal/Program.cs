@@ -57,7 +57,7 @@ namespace Dev_Pascal
             DateTime firstDate = new DateTime(2016, 11, 01);
 
             List<DateTime> dates = new List<DateTime>();
-            for (int i = 1; i < 10; i++) {
+            for (int i = 1; i < 6; i++) {
                 dates.Add((firstDate.ToDate() + freq*i).ToDateTime());
             }
 
@@ -66,8 +66,7 @@ namespace Dev_Pascal
 
             //FixedDivIndex FSEURE = new FixedDivIndex(PricingUnderlying.IND1EDFI, MarkitEquityUnderlying.Eurostoxx, 0, 0, 0.5, 1.00);
             //var sdsd = FSEURE.impliedVolatilitySurface(pricingDate);
-
-
+            
             double couponLevel = 0.077;
             double barrierLevel = 0.70;
             double cliquetLevel = 1.21;
@@ -87,9 +86,9 @@ namespace Dev_Pascal
                 new TARGET(), new Actual365Fixed(), BusinessDayConvention.Preceding);
 
             double px_pdi = pdi.NPV(pricingDate);
-            double yield = pdi.kernel().inspout("Yield_final");
+            // double yield = pdi.kernel().inspout("Yield_final");
             double yield_UIL = pdi.kernel().inspout("Yield_UIL");
-            //double yield_1 = pdi.kernel().inspout("Yield_1");
+           
 
 
             throw new NotImplementedException();

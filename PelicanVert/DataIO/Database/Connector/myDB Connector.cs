@@ -333,7 +333,7 @@ namespace QLyx.DataIO.Connector
             // Connect and Request
             using (var connection = new MySqlConnection(connectionString))
             {
-                var sqlResults = (List<T>)connection.Query<T>(mySQLSelect);
+                 var sqlResults = (List<T>)connection.Query<T>(mySQLSelect);
                 return (List<T>)sqlResults;
             }
 
